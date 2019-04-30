@@ -1,4 +1,3 @@
-# install.packages("caTools")
 # require("caTools")
 #
 # #CLASSIFICATION - EXAMPLE1
@@ -25,6 +24,7 @@
 # fit(c, train.features, train.classes)
 # p <- predict(c, test.features)
 # score(c, test.features, test.classes)
+#
 # export(c, "testTPOT.py") #e.g."/Users/christianwerner/Git/LearnPython/LearnTPOT/testTPOT.py"
 #
 # #REGRESSION1 - EXAMPLE2

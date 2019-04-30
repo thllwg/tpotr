@@ -21,3 +21,8 @@ Imports:
     checkmate,
     R.utils,
     BBmisc
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
