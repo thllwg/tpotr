@@ -1,3 +1,4 @@
+
 fit <- function(obj, features, classes) {
   UseMethod("fit")
 }
@@ -32,6 +33,7 @@ TPOTClassifier <- function(generations=100,
                            early_stop=NULL,
                            verbosity=0,
                            disable_update_check=FALSE) {
+  reticulate::source_python(system.file("python", "pipeline_generator.py", package = "tpotr"))
   # parameter validation
   checkmate::assertInt(generations, lower = 1, null.ok = FALSE)
   checkmate::assertInt(population_size, lower = 1, null.ok = FALSE)
@@ -115,7 +117,7 @@ TPOTRegressor <- function(generations=100,
                           early_stop=NULL,
                           verbosity=0,
                           disable_update_check=FALSE) {
-
+  reticulate::source_python(system.file("python", "pipeline_generator.py", package = "tpotr"))
   # parameter validation
   checkmate::assertInt(generations, lower = 1, null.ok = FALSE)
   checkmate::assertInt(population_size, lower = 1, null.ok = FALSE)
