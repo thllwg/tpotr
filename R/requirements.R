@@ -1,3 +1,11 @@
+findUninstalledPackages <- function(packages){
+  s = sapply(packages, function(p){
+    !reticulate::py_module_available(p)
+  })
+  packages = packages[s]
+  return(packages)
+}
+
 checkPythonVersion <- function(){
   v = reticulate::py_config()$version
   v = as.numeric_version(v)
@@ -6,8 +14,6 @@ checkPythonVersion <- function(){
     Please update to 3.7 or higher.");
   }
 }
-
-
 
 checkAnaconda <- function(){
   result = system2("conda", "--version")
@@ -19,7 +25,7 @@ checkAnaconda <- function(){
       print("Could not find Anaconda in system path, searching in default installation paths...");
       local = checkAnacondaLocal()
       if (local == 0){
-        print("Anaconda found in local installation path");
+        print("Anaconda found in local installation path");t
         return(getDefaultPath());
       } else {
         err = "Could not find a working installation of Anaconda packet manager. \n

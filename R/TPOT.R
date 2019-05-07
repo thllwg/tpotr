@@ -1,6 +1,3 @@
-# install.packages("reticulate")
-# require("reticulate")
-# use_python("PATH") #e.g. /Users/christianwerner/anaconda3/bin/python
 reticulate::source_python(system.file("python", "pipeline_generator.py", package = "tpotr"))
 
 fit <- function(obj, features, classes) {
@@ -130,7 +127,7 @@ TPOTRegressor <- function(generations=100,
   checkmate::assertString(scoring, null.ok = FALSE) #actual choice asserting is handled by tpot
   checkmate::assertInt(cv, lower = 1, null.ok = FALSE)
   checkmate::assertDouble(subsample, lower = 0.1, upper = 1.0, null.ok = FALSE)
-  stopifnot(n.jobs == -1, n.jobs >= 1)
+  if (!(n_jobs == -1 || n_jobs >= 1)) stopf ("Error: n_jobs is neither -1 nor greater than 1.")
   checkmate::assertInt(max_time_mins, null.ok = TRUE, lower = 1)
   checkmate::assertDouble(max_eval_time_mins, lower = 0.0001, null.ok = FALSE)
   checkmate::assertInt(random_state, lower = 0, null.ok = TRUE)
