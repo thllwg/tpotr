@@ -5,8 +5,6 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-#print = functools.partial(print, flush=True) #https://stackoverflow.com/questions/230751/how-to-flush-output-of-print-function
-
 def createClassifier(config):    
     tpot = TPOTClassifier(generations=int(config["generations"]), 
                            population_size=int(config["population_size"]),
@@ -28,7 +26,6 @@ def createClassifier(config):
                            early_stop=None if config["early_stop"] is None else int(config["early_stop"]),
                            verbosity=config["verbosity"],
                            disable_update_check=config["disable_update_check"])
-    print("---Built TPOTClassifier---", flush=True) #https://stackoverflow.com/questions/10019456/usage-of-sys-stdout-flush-method
     return tpot
 
 def createRegressor(config):    
@@ -52,21 +49,16 @@ def createRegressor(config):
                            early_stop=None if config["early_stop"] is None else int(config["early_stop"]),
                            verbosity=config["verbosity"],
                            disable_update_check=config["disable_update_check"])
-    print("---Built TPOTRegressor---", flush=True) #https://stackoverflow.com/questions/10019456/usage-of-sys-stdout-flush-method
     return tpot
 
 def fitTPOT(tpot, features, classes):
     tpot.fit(features, classes)
-    print("---Finished Fitting---", flush=True) #Or flush
 
 def predictTPOT(tpot, features):
-    print("---Finished Prediction---", flush=True)
     return(tpot.predict(features))
 
 def scoreTPOT(tpot, testing_features, testing_classes):
-    print("---Finished Scoring---", flush=True)
-    return(tpot.score(testing_features, testing_classes))
+    return(tpot.score(np.asarray(testing_features), np.asarray(testing_classes)))
 
 def exportTPOT(tpot, path):
     tpot.export(path)
-    print("---Exported File---", flush=True)

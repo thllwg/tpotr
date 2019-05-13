@@ -2,10 +2,6 @@ Package: tpotr
 Type: Package
 Title: An R-Wrapper for the Python Automated Machine Learning tool that optimizes machine learning pipelines using genetic programming (TPOT)
 Version: 0.1.0
-Authors@R: c(
-  person("Thorben", "Hellweg", email = "thorben.hellweg@uni-muenster.de", role = c("aut", "cre", "cph")),
-  person("Christian", "Werner", role = c("ctb, "cph")),
-  person("Christopher", "Olbrich", role = c("ctb", "cph")))
 Author: Thorben Hellweg [aut, cre]
 Maintainer: Thorben Hellweg <thorben.hellweg@uni-muenster.de>
 Description: More about what it does (maybe more than one line)
@@ -20,4 +16,10 @@ Imports:
     caTools,
     checkmate,
     R.utils,
-    BBmisc
+    BBmisc,
+    yaml
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

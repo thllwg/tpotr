@@ -15,19 +15,6 @@
 
   invisible()
 
-  #is Anaconda installed on host system?
-  path = checkAnaconda();
-  if (!is.null(path) && path != ''){
-    if (path != "%GLOBAL%"){
-      reticulate::use_condaenv(path);
-      reticulate::use_python(reticulate::py_config()$python)
-    }
-  }
-  # check Python
-  checkPythonVersion();
-
-  # check TPOT
-  if (!has_package("tpot")) install_package("tpot");
 }
 
 .onUnload <- function(libpath){
