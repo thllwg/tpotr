@@ -27,7 +27,7 @@ install_tpot <- function(method = c("auto", "virtualenv", "conda", "system"),
   python_path = reticulate::conda_list(conda = "auto")[1,]
 
   # create conda env
-  #env = yaml::read_yaml(system.file("environment.yml", package = "tpotr"))
+  # env = yaml::read_yaml(system.file("environment.yml", package = "tpotr"))
   env = list(name = "tpotr")
   packages = c("numpy", "scipy", "scikit-learn", "pandas")
   packagesPip = c("deap", "update_checker", "tqdm", "stopit", "xgboost", "tpot") # "scikit-mdr", "skrebate",
