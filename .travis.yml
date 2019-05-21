@@ -35,7 +35,6 @@ before_install:
   - printenv | sort
 
 script:
-  - R CMD INSTALL .
   - R -e 'tpotr::install_tpot()'
 
 notifications:
