@@ -35,7 +35,7 @@ before_install:
   - printenv | sort
 
 before_script:
-  - R -q -e 'tpotr::install_tpot()
+  - R -q -e 'tpotr::install_tpot()'
 notifications:
   email:
     recipients:
