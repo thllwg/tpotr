@@ -50,7 +50,9 @@ install_tpot <- function(method = c("auto", "virtualenv", "conda", "system"),
 
   print(search())
 
-  reticulate::source_python(system.file("python", "pipeline_generator.py", package = "tpotr"), envir = as.environment("package:tpotr"))
+  tpot_env <- new.env(parent = parent.frame())
+
+  reticulate::source_python(system.file("python", "pipeline_generator.py", package = "tpotr"), envir = tpot_env)
 }
 
 
