@@ -15,6 +15,8 @@
 
   invisible()
 
+  install_tpot()
+
 }
 
 .onUnload <- function(libpath){

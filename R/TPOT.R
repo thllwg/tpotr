@@ -1,5 +1,3 @@
-reticulate::source_python(system.file("python", "pipeline_generator.py", package = "tpotr"))
-
 fit <- function(obj, features, classes) {
   UseMethod("fit")
 }
