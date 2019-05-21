@@ -34,7 +34,7 @@ before_install:
   - export LANG=en_US.UTF-8
   - printenv | sort
 
-script:
+after_script:
   - R -e 'tpotr::install_tpot()'
 
 notifications:
