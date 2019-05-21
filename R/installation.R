@@ -47,7 +47,7 @@ install_tpot <- function(method = c("auto", "virtualenv", "conda", "system"),
   if (!reticulate::py_module_available("tpot")) {
     # throw error message
   }
-  reticulate::source_python(system.file("python", "pipeline_generator.py", package = "tpotr"))
+  reticulate::source_python(system.file("python", "pipeline_generator.py", package = "tpotr"), envir = as.environment("package:tpotr"))
 }
 
 

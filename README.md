@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/thllwg/tpotr.png)](https://travis-ci.com/thllwg/tpotr)
+[![Build Status](https://travis-ci.com/thllwg/tpotr.png?branch=master)](https://travis-ci.com/thllwg/tpotr)
 
 # tpotr
 An R-Wrapper for the Python Automated Machine Learning tool that optimizes machine learning pipelines using genetic programming (TPOT)
