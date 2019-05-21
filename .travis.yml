@@ -22,7 +22,7 @@ matrix:
     - env: BUILD_TARGET=3.7 CONDA_CANARY="-c conda-canary"
 
 before_install:
-  - tlmgr install index
+  - if [[ "$TRAVIS_OS_NAME" != "linux" ]]; then sudo tlmgr install index; else tlmgr install index; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then MINICONDA_OS=Linux; else MINICONDA_OS=MacOSX; fi
   - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-$MINICONDA_OS-x86_64.sh -O miniconda.sh
   - bash miniconda.sh -b -p "$HOME"/miniconda
