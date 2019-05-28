@@ -1,3 +1,4 @@
+topt <- NULL
 install_tpot <- function(method = c("auto", "virtualenv", "conda", "system"),
                          conda = "auto",
                          version = "default",
@@ -48,8 +49,7 @@ install_tpot <- function(method = c("auto", "virtualenv", "conda", "system"),
     # throw error message
   }
 
-  print(search())
-
+  #topt <<- reticulate::import("tpot", delay_load = TRUE)
   reticulate::source_python(system.file("python", "pipeline_generator.py", package = "tpotr"), envir = parent.env(environment()))
 }
 
