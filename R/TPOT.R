@@ -12,7 +12,7 @@ export <- function(obj, path) {
 
 ##################
 
-TPOTClassifier <- function(generations=100,
+TPOTRClassifier <- function(generations=100,
                            population_size=100,
                            offspring_size=NULL,
                            mutation_rate=0.9,
@@ -74,28 +74,28 @@ TPOTClassifier <- function(generations=100,
                           "early_stop" = early_stop,
                           "verbosity" = verbosity,
                           "disable_update_check" = disable_update_check)
-  return(structure(list("Attributes" = inputClassifier,"TPOTObject" = createClassifier(inputClassifier)), class = "TPOTClassifier"))
+  return(structure(list("Attributes" = inputClassifier,"TPOTObject" = createClassifier(inputClassifier)), class = "TPOTRClassifier"))
 }
 
-fit.TPOTClassifier <- function(obj, features, classes) {
+fit.TPOTRClassifier <- function(obj, features, classes) {
   fitTPOT(obj$TPOTObject, features, classes)
 }
 
-predict.TPOTClassifier <- function(obj, features) {
+predict.TPOTRClassifier <- function(obj, features) {
   predictTPOT(obj$TPOTObject, features)
 }
 
-score.TPOTClassifier <- function(obj, testing_features, testing_classes) {
+score.TPOTRClassifier <- function(obj, testing_features, testing_classes) {
   scoreTPOT(obj$TPOTObject, testing_features, testing_classes)
 }
 
-export.TPOTClassifier <- function(obj, path) {
+export.TPOTRClassifier <- function(obj, path) {
   exportTPOT(obj$TPOTObject, path)
 }
 
 ##################
 
-TPOTRegressor <- function(generations=100,
+TPOTRRegressor <- function(generations=100,
                           population_size=100,
                           offspring_size=NULL,
                           mutation_rate=0.9,
@@ -157,21 +157,21 @@ TPOTRegressor <- function(generations=100,
                          "early_stop" = early_stop,
                          "verbosity" = verbosity,
                          "disable_update_check" = disable_update_check)
-  return(structure(list("Attributes" = inputRegressor,"TPOTObject" = createRegressor(inputRegressor)), class = "TPOTRegressor"))
+  return(structure(list("Attributes" = inputRegressor,"TPOTObject" = createRegressor(inputRegressor)), class = "TPOTRRegressor"))
 }
 
-fit.TPOTRegressor <- function(obj, features, classes) {
+fit.TPOTRRegressor <- function(obj, features, classes) {
   fitTPOT(obj$TPOTObject, features, classes)
 }
 
-predict.TPOTRegressor <- function(obj, features) {
+predict.TPOTRRegressor <- function(obj, features) {
   predictTPOT(obj$TPOTObject, features)
 }
 
-score.TPOTRegressor <- function(obj, testing_features, testing_classes) {
+score.TPOTRRegressor <- function(obj, testing_features, testing_classes) {
   scoreTPOT(obj$TPOTObject, testing_features, testing_classes)
 }
 
-export.TPOTRegressor <- function(obj, path) {
+export.TPOTRRegressor <- function(obj, path) {
   exportTPOT(obj$TPOTObject, path)
 }
