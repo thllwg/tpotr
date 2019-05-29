@@ -53,6 +53,7 @@ def createRegressor(config):
 
 def fitTPOT(tpot, features, classes):
     tpot.fit(features, classes)
+    print("", flush = TRUE)
 
 def predictTPOT(tpot, features):
     return(tpot.predict(features))

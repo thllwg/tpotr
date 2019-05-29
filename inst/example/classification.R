@@ -22,7 +22,8 @@ test.classes = test[,10]
 
 
 #Pipeline
-c <- TPOTRClassifier(verbosity=2, max_time_mins=1, max_eval_time_mins=0.04, population_size=15)
+c <- TPOTRClassifier(verbosity=0, generations = 5, population_size=15, n_jobs = 3)
+#reticulate::py_suppress_warnings(fit(c, train.features, train.classes))
 fit(c, train.features, train.classes)
 p <- predict(c, test.features)
 score(c, test.features, test.classes)
