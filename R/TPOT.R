@@ -1,15 +1,57 @@
+#' @title Fitting a model to the data
+#' @description
+#' Uses genetic programming to optimize a machine learning pipeline that
+#' maximizes score on the provided features and target. Performs internal
+#' k-fold cross-validaton to avoid overfitting on the provided data. The
+#' best pipeline is then trained on the entire set of provided samples.
+#'
+#' @param obj A \code{TPOTClassifier} or a \code{TPOTRegressor}
+#' @param feature A \code{data.frame} of observations
+#' @param target List of class labels for prediction
+#' @param sample_weights Per-sample weights. Higher weights indicate more importance. If specified,
+#' sample_weight will be passed to any pipeline element whose fit() function accepts
+#' a sample_weight argument. By default, using sample_weight does not affect tpot's
+#' scoring functions, which determine preferences between pipelines.
+#' @param group Group labels for the samples used when performing cross-validation.
+#' This parameter should only be used in conjunction with sklearn's Group cross-validation
+#' functions, such as sklearn.model_selection.GroupKFold
+#' @return Returns a copy of the fitted TPOT Object
+#' @examples
+#' sum(1:10)
+#' sum(1:5, 6:10)
+#' sum(F, F, F, T, T)
+#'
+#' sum(.Machine$integer.max, 1L)
+#' sum(.Machine$integer.max, 1)
+#'
+#' \dontrun{
+#' sum("a")
+#' }
 fit <- function(obj, features, target, sample_weight = NULL, group = NULL) {
   UseMethod("fit")
 }
 
+#' @title Call fit and predict in sequence.
+#' @description Call fit and predict in sequence.
+#' @inheritParams fit
 fit_predict <- function(obj, features, target, sample_weight = NULL, group = NULL) {
   UseMethod("fit_predict")
 }
 
+#' @title  Use the optimized pipeline to predict the target for a feature set
+#' @description
+#' @param obj A \code{TPOTClassifier} or a \code{TPOTRegressor}
+#' @param feature A \code{data.frame} of observations
+#' @return Predicted target for the samples in the feature matrix
 predict <- function(obj, features){
   UseMethod("predict")
 }
 
+#' @title  Use the optimized pipeline to estimate the class probabilities for a feature set.
+#' @description
+#' @param obj A \code{TPOTClassifier} or a \code{TPOTRegressor}
+#' @param feature A \code{data.frame} of observations
+#' @return The class probabilities of the input samples
 predict_proba <- function(obj, features){
   UseMethod("predict")
 }
@@ -18,14 +60,21 @@ clean_pipeline_string <- function(obj, individual){
   UseMethod("clean_pipeline_string")
 }
 
+#' @title  Return the score on the given testing data using the user-specified scoring function.
+#' @description
+#' @param obj A \code{TPOTClassifier} or a \code{TPOTRegressor}
+#' @param testing_features A \code{data.frame} of the testing set
+#' @param testing_classes A \code{list} of class labels for prediction in the testing set
+#' @return float The estimated test set accuracy
 score <- function(obj, testing_features, testing_classes) {
   UseMethod("score")
 }
 
-score <- function(obj, testing_features, testing_classes) {
-  UseMethod("score")
-}
-
+#' @title Export the optimized pipeline as Python code
+#' @description
+#' @param obj A \code{TPOTClassifier} or a \code{TPOTRegressor}
+#' @param path \code{String} containing the path and file name of the desired output file
+#' @return The class probabilities of the input samples
 export <- function(obj, path) {
   UseMethod("export")
 }
