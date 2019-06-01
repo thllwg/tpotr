@@ -2,11 +2,15 @@ Package: tpotr
 Type: Package
 Title: An R-Wrapper for the Python Automated Machine Learning tool that optimizes machine learning pipelines using genetic programming (TPOT)
 Version: 0.1.0
-Author: Thorben Hellweg [aut, cre]
+Authors@R: as.person(c(
+    "Thorben Hellweg <thorben.hellweg@uni-muenster.de> [aut, cre]", 
+    "Christopher Olbrich <c_olbr@rstudio.com> [aut]"
+  ))
 Maintainer: Thorben Hellweg <thorben.hellweg@uni-muenster.de>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: TPOT is open source genetic programming-based AutoML system that optimizes a series offeature preprocessors and machine learning models with the goal of maximizing classification accuracy on a supervised classification task. This package provides an R interface to the python based TPOT reference implementation.
+License: GPL-3 | file LICENSE.md
+URL: https://github.com/thllwg/tpotr
+BugReports: https://github.com/thllwg/tpotr/issues
 Encoding: UTF-8
 Depends: 
     R (>= 3.1.0)

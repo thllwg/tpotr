@@ -1,6 +1,6 @@
 #CLASSIFICATION - EXAMPLE1
 require("caTools")
-#
+
 #Preprocessing
 data <- read.csv(url("https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/breast-cancer-wisconsin.data"), header = FALSE)
 colnames(data) <- c('Sample code number', 'Clump Thickness','Uniformity of Cell Size','Uniformity of Cell Shape','Marginal Adhesion','Single Epithelial Cell Size','Bare Nuclei','Bland Chromatin','Normal Nucleoli','Mitoses','Class')
@@ -19,13 +19,9 @@ test  = subset(data, sample == FALSE)
 test.features = test[,1:9]
 test.classes = test[,10]
 
-
-
 #Pipeline
-c <- TPOTRClassifier(verbosity=0, generations = 5, population_size=15, n_jobs = 3)
-#reticulate::py_suppress_warnings(fit(c, train.features, train.classes))
+c <- TPOTRClassifier(verbosity=2, generations = 5, population_size=15, n_jobs = 3)
 fit(c, train.features, train.classes)
 p <- predict(c, test.features)
 score(c, test.features, test.classes)
-
 export(c, "testTPOT.py")

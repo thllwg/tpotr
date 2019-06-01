@@ -5,8 +5,8 @@
     devtools.path = "~/R-dev",
     devtools.install.args = "",
     devtools.name = "Thorben Hellweg",
-    devtools.desc.author = "First Last <first.last@example.com> [aut, cre]",
-    devtools.desc.license = "What license is it under?",
+    devtools.desc.author = "Thorben Hellweg <thorben.hellweg@uni-muenster.de> [aut, cre]",
+    devtools.desc.license = "GPL-3",
     devtools.desc.suggests = NULL,
     devtools.desc = list()
   )
