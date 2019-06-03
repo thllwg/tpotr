@@ -21,7 +21,8 @@ Imports:
     checkmate,
     R.utils,
     BBmisc,
-    yaml
+    yaml,
+    mlr
 Suggests: 
     testthat,
     knitr,

@@ -20,8 +20,6 @@ topt <- NULL
 #' @param restart_session Restart R session after installing (note this will
 #'   only occur within RStudio).
 #'
-#' @importFrom jsonlite fromJSON
-#'
 #' @export
 install_tpot <- function(method = c("auto", "conda"),
                          conda = "auto",

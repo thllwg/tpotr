@@ -1,0 +1,24 @@
+library("mlr")
+data(iris)
+# 75% of the sample size
+smp_size <- floor(0.75 * nrow(iris))
+
+# set the seed to make your partition reproducible
+set.seed(123)
+train_ind <- sample(seq_len(nrow(iris)), size = smp_size)
+
+train <- iris[train_ind, ]
+test <- iris[-train_ind, ]
+train[5] <- as.factor(as.numeric(train[[5]]))
+test[5] <- as.factor(as.numeric(test[[5]]))
+
+task = makeClassifTask(data = train, target = "Species", id = "iris")
+learner = makeLearner(cl = "classif.tpot", population_size = 10, generations = 3, n_jobs = 3, verbosity = 2)
+model = train(learner, task)
+predictLearner(learner, model, test[,1:4])
+
+
+# classifier = TPOTRClassifier(population_size = 10, generations = 3, n_jobs = 3, verbosity = 2)
+# fit(classifier, train[1:4], train[5])
+# predict(classifier, test[1:4])
+# score(classifier, test[1:4], test[5])

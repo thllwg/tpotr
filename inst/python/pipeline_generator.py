@@ -54,6 +54,7 @@ def createRegressor(config):
 def fitTPOT(tpot, features, target, sample_weight=None, groups=None):
     tpot.fit(features, target, sample_weight, groups)
     print("", flush = True)
+    return(tpot)
 
 def fit_predictTPOT(tpot, features, target, sample_weight=None, groups=None):
     tpot.fit_predict(features, target, sample_weight, groups)
