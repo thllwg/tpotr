@@ -22,7 +22,8 @@ Imports:
     R.utils,
     BBmisc,
     yaml,
-    mlr
+    mlr,
+    stats
 Suggests: 
     testthat,
     knitr,

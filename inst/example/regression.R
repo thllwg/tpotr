@@ -17,4 +17,4 @@ c_wine <- TPOTRRegressor(verbosity=2, max_time_mins=2, population_size=50)
 fit(c_wine, train_wine.features, train_wine.classes)
 p_wine <- predict(c_wine, test_wine.features)
 score(c_wine, test_wine.features, test_wine.classes)
-export(c_wine, "testTPOT_wine.py") #e.g. "/Users/christianwerner/Git/LearnPython/LearnTPOT/testTPOT_wine.py"
+export(c_wine, "testTPOT_wine.py")

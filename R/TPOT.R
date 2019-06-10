@@ -16,17 +16,6 @@
 #' This parameter should only be used in conjunction with sklearn's Group cross-validation
 #' functions, such as sklearn.model_selection.GroupKFold
 #' @return Returns a copy of the fitted TPOT Object
-#' @examples
-#' sum(1:10)
-#' sum(1:5, 6:10)
-#' sum(F, F, F, T, T)
-#'
-#' sum(.Machine$integer.max, 1L)
-#' sum(.Machine$integer.max, 1)
-#'
-#' \dontrun{
-#' sum("a")
-#' }
 #' @export fit
 fit <- function(obj, features, target, sample_weight = NULL, group = NULL) {
   UseMethod("fit")
@@ -46,8 +35,13 @@ fit_predict <- function(obj, features, target, sample_weight = NULL, group = NUL
 #' @param feature A \code{data.frame} of observations
 #' @return Predicted target for the samples in the feature matrix
 #' @export
-predict <- function(obj, features){
-  UseMethod("predict")
+predict <- function(obj, ...){
+  #print(class(obj))
+  if (class(obj) == "WrappedModel")
+    {stats::predict(obj, ...)}
+  else {
+    UseMethod("predict")
+  }
 }
 
 #' @title  Use the optimized pipeline to estimate the class probabilities for a feature set.
@@ -57,7 +51,7 @@ predict <- function(obj, features){
 #' @return The class probabilities of the input samples
 #' @export predict_proba
 predict_proba <- function(obj, features){
-  UseMethod("predict")
+  UseMethod("predict_proba")
 }
 
 clean_pipeline_string <- function(obj, individual){
@@ -197,7 +191,7 @@ TPOTRRegressor <- function(generations=100,
                           offspring_size=NULL,
                           mutation_rate=0.9,
                           crossover_rate=0.1,
-                          scoring='accuracy',
+                          scoring='neg_mean_squared_error',
                           cv=5,
                           subsample=1.0,
                           n_jobs=1,
@@ -259,7 +253,8 @@ TPOTRRegressor <- function(generations=100,
 
 #' @export fit.TPOTRRegressor
 fit.TPOTRRegressor <- function(obj, features, target, sample_weight = NULL, groups = NULL) {
-  fitTPOT(obj$TPOTObject, features, target, sample_weight, groups)
+  obj$TPOTObject <- fitTPOT(obj$TPOTObject, features, target, sample_weight, groups)
+  return(obj)
 }
 
 #' @export fit_predict.TPOTRRegressor
@@ -290,3 +285,4 @@ clean_pipeline_string.TPOTRRegressor <- function(obj, individual) {
 export.TPOTRRegressor <- function(obj, path) {
   exportTPOT(obj$TPOTObject, path)
 }
+

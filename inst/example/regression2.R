@@ -26,7 +26,8 @@ test_concrete.features = test_concrete[,1:8]
 test_concrete.classes = test_concrete[,9]
 
 #Pipeline
-c_concrete <- TPOTRegressor(verbosity=2, max_time_mins=2, population_size=50, n_jobs = 4)
+c_concrete <- TPOTRRegressor(verbosity=2, max_time_mins=3, population_size=50, n_jobs = 4)
 fit(c_concrete, train_concrete.features, train_concrete.classes)
 score(c_concrete, test_concrete.features, test_concrete.classes)
-p_concrete <- predict(c_concrete, test_concrete.features)
+predict(c_concrete, test_concrete.features)
+predict_proba(c_concrete, test_concrete.features)
