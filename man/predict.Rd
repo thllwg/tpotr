@@ -4,7 +4,7 @@
 \alias{predict}
 \title{Use the optimized pipeline to predict the target for a feature set}
 \usage{
-predict(obj, features)
+predict(obj, ...)
 }
 \arguments{
 \item{obj}{A \code{TPOTClassifier} or a \code{TPOTRegressor}}

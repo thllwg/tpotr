@@ -31,15 +31,3 @@ maximizes score on the provided features and target. Performs internal
 k-fold cross-validaton to avoid overfitting on the provided data. The
 best pipeline is then trained on the entire set of provided samples.
 }
-\examples{
-sum(1:10)
-sum(1:5, 6:10)
-sum(F, F, F, T, T)
-
-sum(.Machine$integer.max, 1L)
-sum(.Machine$integer.max, 1)
-
-\dontrun{
-sum("a")
-}
-}
