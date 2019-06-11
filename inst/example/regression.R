@@ -13,8 +13,9 @@ test_wine.features = test_wine[,1:11]
 test_wine.classes = test_wine[,12]
 
 #Pipeline
-c_wine <- TPOTRRegressor(verbosity=2, max_time_mins=2, population_size=50)
-fit(c_wine, train_wine.features, train_wine.classes)
-p_wine <- predict(c_wine, test_wine.features)
-score(c_wine, test_wine.features, test_wine.classes)
-export(c_wine, "testTPOT_wine.py")
+tpot <- TPOTRRegressor(verbosity=2, max_time_mins=2, population_size=50)
+tpot <- fit(c_wine, train_wine.features, train_wine.classes)
+pred <- predict(tpot, test_wine.features)
+pred_prob <- predict_proba(tpot, test_wine.features)
+score(tpot, test_wine.features, test_wine.classes)
+export(tpot, "testTPOT_wine.py")

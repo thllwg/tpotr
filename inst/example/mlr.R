@@ -13,9 +13,11 @@ train[5] <- as.factor(as.numeric(train[[5]]))
 test[5] <- as.factor(as.numeric(test[[5]]))
 
 task = makeClassifTask(data = train, target = "Species", id = "iris")
-learner = makeLearner(cl = "classif.tpot", population_size = 10, generations = 3, n_jobs = 3, verbosity = 2, predict.type = "prob")
+learner = makeLearner(cl = "classif.tpot", population_size = 10, generations = 3, n_jobs = 3, verbosity = 2)
 model = train(learner, task)
-predict(obj = model, newdata = test[,1:4])
+pred = predict(obj = model, newdata = test)
+print(pred)
+performance(pred, measures = list(acc))
 
 ##########################################################
 library(caTools)

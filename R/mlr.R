@@ -1,3 +1,4 @@
+#' @export
 makeRLearner.classif.tpot <- function(){
   makeRLearnerClassif(
     cl = "classif.tpot",
@@ -30,6 +31,8 @@ makeRLearner.classif.tpot <- function(){
     note = "Requires an Anaconda Installation"
   )
 }
+
+#' @export
 trainLearner.classif.tpot <- function(.learner, .task, .subset, .weights = NULL, ...){
   data = getTaskData(task = .task, subset = .subset)
   features = data[, getTaskFeatureNames(.task)]
@@ -38,11 +41,20 @@ trainLearner.classif.tpot <- function(.learner, .task, .subset, .weights = NULL,
   fit(classifier, features = features, target = target)
 }
 
+#' @export
 predictLearner.classif.tpot <- function(.learner, .model, .newdata, ...){
   p = NULL
   if (.learner$predict.type == "response") {
-    p = tpotr::predict(.model$learner.model, features = .newdata)
-    p = factor(p)
+    if (.model$task.desc$target %in% colnames(.newdata)){
+      truth = .newdata[[.model$task.desc$target]]
+      targetless = .newdata[, - grep("^Species$", colnames(iris))]
+      p = tpotr::predict(.model$learner.model, features = targetless)
+      p = factor(p)
+      p$truth = factor(.newdata[[.model$task.desc$target]])
+    } else {
+      p = tpotr::predict(.model$learner.model, features = .newdata)
+      p = factor(p)
+    }
   }
   else {
     lvls = .model$task.desc$class.levels
@@ -52,8 +64,7 @@ predictLearner.classif.tpot <- function(.learner, .model, .newdata, ...){
   return(p)
 }
 
-
-
+#' @export
 makeRLearner.regr.tpot <- function(){
   makeRLearnerRegr(
     cl = "regr.tpot",
@@ -86,6 +97,8 @@ makeRLearner.regr.tpot <- function(){
     note = "Requires an Anaconda Installation"
   )
 }
+
+#' @export
 trainLearner.regr.tpot <- function(.learner, .task, .subset, .weights = NULL, ...){
   data = getTaskData(task = .task, subset = .subset)
   features = data[, getTaskFeatureNames(.task)]
@@ -94,13 +107,25 @@ trainLearner.regr.tpot <- function(.learner, .task, .subset, .weights = NULL, ..
   fit(regressor, features = features, target = target)
 }
 
+#' @export
 predictLearner.regr.tpot <- function(.learner, .model, .newdata, predict.method = "response", ...){
   p = NULL
-  if (predict.method == "response"){
-    p = tpotr::predict(.model$learner.model, features = .newdata)
-  } else if (predict.method == "prob"){
-    p = tpotr::predict_proba(.model$learner.model, features = .newdata)
+  if (.learner$predict.type == "response") {
+    if (.model$task.desc$target %in% colnames(.newdata)){
+      truth = .newdata[[.model$task.desc$target]]
+      targetless = .newdata[, - grep("^Species$", colnames(iris))]
+      p = tpotr::predict(.model$learner.model, features = targetless)
+      p = as.numeric(p)
+      p$truth = factor(.newdata[[.model$task.desc$target]])
+    } else {
+      p = tpotr::predict(.model$learner.model, features = .newdata)
+      p = as.numeric(p)
+    }
   }
-  p = as.numeric(p)
+  else {
+    lvls = .model$task.desc$class.levels
+    p = tpotr::predict_proba(.model$learner.model, features = .newdata)
+    colnames(p) <- lvls
+  }
   return(p)
 }
