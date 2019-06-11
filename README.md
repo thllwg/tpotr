@@ -29,7 +29,7 @@ Below we walk through a simple example of using TPOT in R to fit a machine learn
 The `iris` flower dataset is a multivariate data set consisting 50 samples from each of three species of Iris, with four measured features from each sample.
 
 We first split the dataset to get one for training and one for validation purposes:
-```{r}
+```r
 library(tpotr)
 data(iris)
 # 75% of the sample size
@@ -45,19 +45,19 @@ train[5] <- as.numeric(train[[5]])
 test[5] <- as.numeric(test[[5]])
 ```
 We use the four features to predict the species of the flower. As this is a classification task, first a TPOTRClassifier object will be instantiated. Of the variety of parameters, we decide to have the Classifier train over 5 generations with a population size of 15 individuals each. The `fit` method starts the training.
-```{r}
+```r
 classifier <- TPOTRClassifier(verbosity=2, generations = 5, population_size=15, n_jobs = 3)
 fit(classifier, train[1:4], train[5])
 ```
 You can now use the fitted pipeline for predictions. To assess the accurancy of the predictions, the score() method can be used. While *accurancy* is the default measure in classification with tpot, other means can be used by submitting different scoring functions during the TPOTRClassifier instantiation.
-```{r}
+```r
 predict(classifier, test[1:4])
 score(classifier, test[1:4], test[5])
 ```
 
 ### Fitting a machine learning pipeline with mlr
 The TPOT-R package supports integration with the [Machine Learning in R](https://mlr.mlr-org.com/) package `mlr`. 
-```{r}
+```r
 library("mlr")
 train[5] <- as.factor(as.numeric(train[[5]]))
 test[5] <- as.factor(as.numeric(test[[5]]))
