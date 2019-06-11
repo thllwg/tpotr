@@ -1,17 +1,88 @@
-fit <- function(obj, features, classes) {
+#' @title Fitting a model to the data
+#' @description
+#' Uses genetic programming to optimize a machine learning pipeline that
+#' maximizes score on the provided features and target. Performs internal
+#' k-fold cross-validaton to avoid overfitting on the provided data. The
+#' best pipeline is then trained on the entire set of provided samples.
+#'
+#' @param obj A \code{TPOTClassifier} or a \code{TPOTRegressor}
+#' @param feature A \code{data.frame} of observations
+#' @param target List of class labels for prediction
+#' @param sample_weights Per-sample weights. Higher weights indicate more importance. If specified,
+#' sample_weight will be passed to any pipeline element whose fit() function accepts
+#' a sample_weight argument. By default, using sample_weight does not affect tpot's
+#' scoring functions, which determine preferences between pipelines.
+#' @param group Group labels for the samples used when performing cross-validation.
+#' This parameter should only be used in conjunction with sklearn's Group cross-validation
+#' functions, such as sklearn.model_selection.GroupKFold
+#' @return Returns a copy of the fitted TPOT Object
+#' @export fit
+fit <- function(obj, features, target, sample_weight = NULL, group = NULL) {
   UseMethod("fit")
 }
 
+#' @title Call fit and predict in sequence.
+#' @description Call fit and predict in sequence.
+#' @inheritParams fit
+#' @export fit_predict
+fit_predict <- function(obj, features, target, sample_weight = NULL, group = NULL) {
+  UseMethod("fit_predict")
+}
+
+#' @title  Use the optimized pipeline to predict the target for a feature set
+#' @description
+#' @param obj A \code{TPOTClassifier} or a \code{TPOTRegressor}
+#' @param feature A \code{data.frame} of observations
+#' @return Predicted target for the samples in the feature matrix
+#' @export
+predict <- function(obj, ...){
+  #print(class(obj))
+  if (class(obj) == "WrappedModel")
+    {stats::predict(obj, ...)}
+  else {
+    UseMethod("predict")
+  }
+}
+
+#' @title  Use the optimized pipeline to estimate the class probabilities for a feature set.
+#' @description
+#' @param obj A \code{TPOTClassifier} or a \code{TPOTRegressor}
+#' @param feature A \code{data.frame} of observations
+#' @return The class probabilities of the input samples
+#' @export predict_proba
+predict_proba <- function(obj, features){
+  UseMethod("predict_proba")
+}
+
+clean_pipeline_string <- function(obj, individual){
+  UseMethod("clean_pipeline_string")
+}
+
+#' @title  Return the score on the given testing data using the user-specified scoring function.
+#' @description
+#' @param obj A \code{TPOTClassifier} or a \code{TPOTRegressor}
+#' @param testing_features A \code{data.frame} of the testing set
+#' @param testing_classes A \code{list} of class labels for prediction in the testing set
+#' @return float The estimated test set accuracy
+#' @export score
 score <- function(obj, testing_features, testing_classes) {
   UseMethod("score")
 }
 
+#' @title Export the optimized pipeline as Python code
+#' @description
+#' @param obj A \code{TPOTClassifier} or a \code{TPOTRegressor}
+#' @param path \code{String} containing the path and file name of the desired output file
+#' @return The class probabilities of the input samples
+#' @export export
 export <- function(obj, path) {
   UseMethod("export")
 }
 
-##################
 
+
+##################
+#' @export TPOTRClassifier
 TPOTRClassifier <- function(generations=100,
                            population_size=100,
                            offspring_size=NULL,
@@ -77,30 +148,50 @@ TPOTRClassifier <- function(generations=100,
   return(structure(list("Attributes" = inputClassifier,"TPOTObject" = createClassifier(inputClassifier)), class = "TPOTRClassifier"))
 }
 
-fit.TPOTRClassifier <- function(obj, features, classes) {
-  fitTPOT(obj$TPOTObject, features, classes)
+#' @export fit.TPOTRClassifier
+fit.TPOTRClassifier <- function(obj, features, target, sample_weight = NULL, groups = NULL) {
+  obj$TPOTObject <- fitTPOT(obj$TPOTObject, features, target, sample_weight, groups)
+  return(obj)
 }
 
+#' @export fit_predict.TPOTRClassifier
+fit_predict.TPOTRClassifier <- function(obj, features, target, sample_weight = NULL, groups = NULL) {
+  fit_predictTPOT(obj$TPOTObject, features, target, sample_weight, groups)
+}
+
+#' @export predict.TPOTRClassifier
 predict.TPOTRClassifier <- function(obj, features) {
   predictTPOT(obj$TPOTObject, features)
 }
 
+#' @export predict_proba.TPOTRClassifier
+predict_proba.TPOTRClassifier <- function(obj, features) {
+  predict_probaTPOT(obj$TPOTObject, features)
+}
+
+#' @export score.TPOTRClassifier
 score.TPOTRClassifier <- function(obj, testing_features, testing_classes) {
   scoreTPOT(obj$TPOTObject, testing_features, testing_classes)
 }
 
+clean_pipeline_string.TPOTRClassifier <- function(obj, individual) {
+  clean_pipeline_stringTPOT(obj$TPOTObject, individual)
+}
+
+#' @export export.TPOTRClassifier
 export.TPOTRClassifier <- function(obj, path) {
   exportTPOT(obj$TPOTObject, path)
 }
 
 ##################
 
+#' @export TPOTRRegressor
 TPOTRRegressor <- function(generations=100,
                           population_size=100,
                           offspring_size=NULL,
                           mutation_rate=0.9,
                           crossover_rate=0.1,
-                          scoring='accuracy',
+                          scoring='neg_mean_squared_error',
                           cv=5,
                           subsample=1.0,
                           n_jobs=1,
@@ -160,18 +251,38 @@ TPOTRRegressor <- function(generations=100,
   return(structure(list("Attributes" = inputRegressor,"TPOTObject" = createRegressor(inputRegressor)), class = "TPOTRRegressor"))
 }
 
-fit.TPOTRRegressor <- function(obj, features, classes) {
-  fitTPOT(obj$TPOTObject, features, classes)
+#' @export fit.TPOTRRegressor
+fit.TPOTRRegressor <- function(obj, features, target, sample_weight = NULL, groups = NULL) {
+  obj$TPOTObject <- fitTPOT(obj$TPOTObject, features, target, sample_weight, groups)
+  return(obj)
 }
 
+#' @export fit_predict.TPOTRRegressor
+fit_predict.TPOTRRegressor <- function(obj, features, target, sample_weight = NULL, groups = NULL) {
+  fit_predictTPOT(obj$TPOTObject, features, target, sample_weight, groups)
+}
+
+#' @export predict.TPOTRRegressor
 predict.TPOTRRegressor <- function(obj, features) {
   predictTPOT(obj$TPOTObject, features)
 }
 
+#' @export predict_proba.TPOTRRegressor
+predict_proba.TPOTRRegressor <- function(obj, features) {
+  predict_probaTPOT(obj$TPOTObject, features)
+}
+
+#' @export score.TPOTRRegressor
 score.TPOTRRegressor <- function(obj, testing_features, testing_classes) {
   scoreTPOT(obj$TPOTObject, testing_features, testing_classes)
 }
 
+clean_pipeline_string.TPOTRRegressor <- function(obj, individual) {
+  clean_pipeline_stringTPOT(obj$TPOTObject, individual)
+}
+
+#' @export export.TPOTRRegressor
 export.TPOTRRegressor <- function(obj, path) {
   exportTPOT(obj$TPOTObject, path)
 }
+

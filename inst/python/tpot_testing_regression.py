@@ -1,10 +1,12 @@
 import pandas as pd
+from urllib.request import urlopen
 import numpy as np
 from sklearn.model_selection import train_test_split
 from tpot import TPOTRegressor
-
+import functools
+print = functools.partial(print, flush=True)
 #Preprocessing
-wine_data = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv',header=0, sep=";")
+wine_data = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv',header=0, sep=";")
 
 #Training and test data
 wine = wine_data

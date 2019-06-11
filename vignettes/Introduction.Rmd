@@ -1,0 +1,66 @@
+---
+title: "A brief introduction to tpotr"
+author: "Thorben Hellweg"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette: 
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# A gentle introduction
+The **tpotr** package, *Tree-based Pipeline Optimization Tool in R*, is conceived as a "Data Science Assistant" to automate the most tedious part of machine learning: Finding the best pipeline for your data.
+
+The **tpotr** package enables you to use the well known python based **tpot** module in your favourite programming language R. TPOT intelligently explores thousands of possible machine learning pipelines by using genetic programming. Once finished, the fitted pipeline can be accessed in R and used for prediction.
+
+The best way to illustrate the process of fitting a machine learning pipeline in **tpotr** is by example. Assume the goal is to find a pipeline for the well known iris dataset. We first split the dataset to get one for training and one for validation purposes:
+```{r setup}
+library(tpotr)
+```
+```{r}
+data(iris)
+# 75% of the sample size
+smp_size <- floor(0.75 * nrow(iris))
+
+# set the seed to make your partition reproducible
+set.seed(123)
+train_ind <- sample(seq_len(nrow(iris)), size = smp_size)
+
+train <- iris[train_ind, ]
+test <- iris[-train_ind, ]
+train[5] <- as.numeric(train[[5]])
+test[5] <- as.numeric(test[[5]])
+```
+The iris dataset holds 150 observations with 5 features. We will use the first 4 features to predict the 5th, the species. As this is a classification task, we use a TPOTRClassifier to fit a pipeline:
+```{r}
+library(tpotr)
+classifier <- TPOTRClassifier(verbosity=2, generations = 5, population_size=15, n_jobs = 3)
+tpotr::fit(classifier, train[1:4], train[5])
+```
+You can now use the fitted pipeline for predictions. To assess the accurancy of the predictions, the score() method can be used.
+```{r}
+predict(classifier, test[1:4])
+score(classifier, test[1:4], test[5])
+```
+## Using MLR ##
+The tpotr package provides learner integration with the famous mlr package. You can utilize automated machine learning pipelines with mlr as follows:
+```{r}
+library("mlr")
+train[5] <- as.factor(as.numeric(train[[5]]))
+test[5] <- as.factor(as.numeric(test[[5]]))
+task = makeClassifTask(data = train, target = "Species", id = "iris")
+learner = makeLearner(cl = "classif.tpot", population_size = 10, generations = 3, n_jobs = 3, verbosity = 2)
+model = train(learner, task)
+pred = predict(obj = model, newdata = test)
+performance(pred, measures = list(acc))
+```

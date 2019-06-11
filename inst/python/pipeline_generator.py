@@ -51,11 +51,24 @@ def createRegressor(config):
                            disable_update_check=config["disable_update_check"])
     return tpot
 
-def fitTPOT(tpot, features, classes):
-    tpot.fit(features, classes)
+def fitTPOT(tpot, features, target, sample_weight=None, groups=None):
+    tpot.fit(features, target, sample_weight, groups)
+    print("", flush = True)
+    return(tpot)
+
+def fit_predictTPOT(tpot, features, target, sample_weight=None, groups=None):
+    tpot.fit_predict(features, target, sample_weight, groups)
+    print("", flush = True)
+    return(tpot)
 
 def predictTPOT(tpot, features):
     return(tpot.predict(features))
+
+def predict_probaTPOT(tpot, features):
+    return(tpot.predict_proba(features))
+
+def clean_pipeline_stringTPOT(tpot, individual):
+    return(tpot.clean_pipeline_string(individual))
 
 def scoreTPOT(tpot, testing_features, testing_classes):
     return(tpot.score(np.asarray(testing_features), np.asarray(testing_classes)))
