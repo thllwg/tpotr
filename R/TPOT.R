@@ -150,7 +150,8 @@ TPOTRClassifier <- function(generations=100,
 
 #' @export fit.TPOTRClassifier
 fit.TPOTRClassifier <- function(obj, features, target, sample_weight = NULL, groups = NULL) {
-  obj$TPOTObject <- fitTPOT(obj$TPOTObject, features, target, sample_weight, groups)
+  capture <- reticulate::py_capture_output(obj$TPOTObject <- fitTPOT(obj$TPOTObject, features, target, sample_weight, groups), c("stdout"))
+  obj$capture <- capture
   return(obj)
 }
 
@@ -284,5 +285,25 @@ clean_pipeline_string.TPOTRRegressor <- function(obj, individual) {
 #' @export export.TPOTRRegressor
 export.TPOTRRegressor <- function(obj, path) {
   exportTPOT(obj$TPOTObject, path)
+}
+
+#' @export printPipeline
+printPipeline <- function(obj){
+  UseMethod("printPipeline")
+}
+
+#' @export printPipeline.WrappedModel
+printPipeline.WrappedModel <- function(mod){
+  cat(mod$learner.model$capture)
+}
+
+#' @export printPipeline.TPOTRRegressor
+printPipeline.TPOTRRegressor <- function(obj){
+  cat(obj$capture)
+}
+
+#' @export printPipeline.TPOTRClassifier
+printPipeline.TPOTRClassifier <- function(obj){
+  cat(obj$capture)
 }
 

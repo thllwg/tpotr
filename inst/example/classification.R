@@ -20,8 +20,8 @@ test.features = test[,1:9]
 test.classes = test[,10]
 
 #Pipeline
-c <- TPOTRClassifier(verbosity=2, generations = 5, population_size=15, n_jobs = 3)
-fit(c, train.features, train.classes)
-p <- predict(c, test.features)
-score(c, test.features, test.classes)
-export(c, "testTPOT.py")
+tpot <- TPOTRClassifier(verbosity=2, generations = 5, population_size=15, n_jobs = 3)
+tpot <- fit(tpot, train.features, train.classes)
+p <- predict(tpot, test.features)
+score(tpot, test.features, test.classes)
+export(tpot, "testTPOT.py")
