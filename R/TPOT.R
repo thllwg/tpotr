@@ -294,16 +294,16 @@ printPipeline <- function(obj){
 
 #' @export printPipeline.WrappedModel
 printPipeline.WrappedModel <- function(mod){
-  cat(mod$learner.model$capture)
+  return(mod$learner.model$capture)
 }
 
 #' @export printPipeline.TPOTRRegressor
 printPipeline.TPOTRRegressor <- function(obj){
-  cat(obj$capture)
+  return(obj$capture)
 }
 
 #' @export printPipeline.TPOTRClassifier
 printPipeline.TPOTRClassifier <- function(obj){
-  cat(obj$capture)
+  return(obj$capture)
 }
 
