@@ -254,7 +254,8 @@ TPOTRRegressor <- function(generations=100,
 
 #' @export fit.TPOTRRegressor
 fit.TPOTRRegressor <- function(obj, features, target, sample_weight = NULL, groups = NULL) {
-  obj$TPOTObject <- fitTPOT(obj$TPOTObject, features, target, sample_weight, groups)
+  capture <- reticulate::py_capture_output(obj$TPOTObject <- fitTPOT(obj$TPOTObject, features, target, sample_weight, groups), c("stdout"))
+  obj$capture <- capture
   return(obj)
 }
 
@@ -306,4 +307,40 @@ printPipeline.TPOTRRegressor <- function(obj){
 printPipeline.TPOTRClassifier <- function(obj){
   cat(obj$capture)
 }
+
+#' @export getGenerations
+getGenerations <- function(obj){
+  UseMethod("getGenerations")
+}
+
+#' @export getGenerations.WrappedModel
+getGenerations.WrappedModel <- function(mod){
+  capture = mod$learner.model$capture
+  generations_list <- lapply(str_extract_all(capture, "score: 0.\\d+"), function(x){ #"score: 0. doesnt work with regression"
+    as.numeric(sub("score: ", "", x))
+  })
+  generations <- unlist(generations_list)
+}
+
+#' @export getPipeline
+getPipeline <- function(obj){
+  UseMethod("getPipeline")
+}
+
+#' @export getPipeline.WrappedModel
+getPipeline.WrappedModel <- function(mod){
+  capture = mod$learner.model$capture
+  pipeline <- gsub("^\\s+|\\s+$", "", sub(".*pipeline:", "", capture))
+}
+
+#' @export getPipeline.TPOTRRegressor
+getPipeline.TPOTRRegressor <- function(obj){
+  pipeline <- gsub("^\\s+|\\s+$", "", sub(".*pipeline:", "", obj$capture))
+}
+
+#' @export getPipeline.TPOTRClassifier
+getPipeline.TPOTRClassifier <- function(obj){
+  pipeline <- gsub("^\\s+|\\s+$", "", sub(".*pipeline:", "", obj$capture))
+}
+
 

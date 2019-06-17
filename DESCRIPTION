@@ -23,7 +23,8 @@ Imports:
     R.utils,
     BBmisc,
     yaml,
-    stats
+    stats,
+    stringr
 Suggests: 
     testthat,
     knitr,
