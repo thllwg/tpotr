@@ -80,4 +80,8 @@ Currently there is a range of problems in TPOT-R. Not all of them are listed bel
 
 * When training a regressor, TPOT terminates with the error message that the data is incorrectly formatted or the incorrect TPOT type (classifier) is in use.
 
-   This problem is - according to the (Python) TPOT issue tracker - widespread and recurs in different constellations. Despite the misleading error message, the real problem seems to be the lack of training time or number of generations. If you play around with the values, the regressor should run through at some point.
+   I don't know. Despite the misleading error message, the real problem seems to be the lack of training time or number of generations? If you play around with the values, the regressor should run through at some point. It also may be a pointer problem? Anyway, if you find the bug please commit a fix :)
+
+* When using the mlr integration with `predict.type="prob"`, an error occurs after using the predict method.
+
+   TPOT sometimes returns a pipeline that does not support class-probabilities in predictions. See the mlr examples in the corresponding `examples`folder on how to write a loop that fits a new model in such cases. 

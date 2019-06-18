@@ -316,7 +316,7 @@ getGenerations <- function(obj){
 #' @export getGenerations.WrappedModel
 getGenerations.WrappedModel <- function(mod){
   capture = mod$learner.model$capture
-  generations_list <- lapply(str_extract_all(capture, "score: 0.\\d+"), function(x){ #"score: 0. doesnt work with regression"
+  generations_list <- lapply(stringr::str_extract_all(capture, "score: 0.\\d+"), function(x){ #"score: 0. doesnt work with regression"
     as.numeric(sub("score: ", "", x))
   })
   generations <- unlist(generations_list)
