@@ -47,7 +47,7 @@ predictLearner.classif.tpot <- function(.learner, .model, .newdata, ...){
   if (.learner$predict.type == "response") {
     if (.model$task.desc$target %in% colnames(.newdata)){
       truth = .newdata[[.model$task.desc$target]]
-      targetless = .newdata[, - grep("^Species$", colnames(iris))]
+      targetless = .newdata[, - grep(paste0("^", model$task.desc$target, "$"), colnames(iris))]
       p = tpotr::predict(.model$learner.model, features = targetless)
       p = factor(p)
       p$truth = factor(.newdata[[.model$task.desc$target]])
@@ -113,7 +113,7 @@ predictLearner.regr.tpot <- function(.learner, .model, .newdata, predict.method 
   if (.learner$predict.type == "response") {
     if (.model$task.desc$target %in% colnames(.newdata)){
       truth = .newdata[[.model$task.desc$target]]
-      targetless = .newdata[, - grep("^Species$", colnames(iris))]
+      targetless = .newdata[, - grep(paste0("^", model$task.desc$target, "$"), colnames(iris))]
       p = tpotr::predict(.model$learner.model, features = targetless)
       p = as.numeric(p)
       p$truth = factor(.newdata[[.model$task.desc$target]])
