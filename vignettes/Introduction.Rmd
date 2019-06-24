@@ -45,7 +45,7 @@ The iris dataset holds 150 observations with 5 features. We will use the first 4
 ```{r}
 library(tpotr)
 classifier <- TPOTRClassifier(verbosity=2, generations = 5, population_size=15, n_jobs = 3)
-tpotr::fit(classifier, train[1:4], train[5])
+classifier <- fit(classifier, train[1:4], train[5])
 ```
 You can now use the fitted pipeline for predictions. To assess the accurancy of the predictions, the score() method can be used.
 ```{r}
