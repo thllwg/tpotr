@@ -4,7 +4,8 @@ Title: An R-Wrapper for the Python Automated Machine Learning tool that optimize
 Version: 0.1.0
 Authors@R: as.person(c(
     "Thorben Hellweg <thorben.hellweg@uni-muenster.de> [aut, cre]", 
-    "Christopher Olbrich <c_olbr@rstudio.com> [aut]"
+    "Christopher Olbrich <c_olbr@rstudio.com> [aut]",
+    "Christian Werner <c_wern@rstudio.com> [aut ]"
   ))
 Maintainer: Thorben Hellweg <thorben.hellweg@uni-muenster.de>
 Description: TPOT is open source genetic programming-based AutoML system that optimizes a series offeature preprocessors and machine learning models with the goal of maximizing classification accuracy on a supervised classification task. This package provides an R interface to the python based TPOT reference implementation.
