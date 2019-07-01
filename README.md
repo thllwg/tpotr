@@ -5,15 +5,15 @@
 An R-Wrapper for the Python Automated Machine Learning tool that optimizes machine learning pipelines using genetic programming (TPOT)
 
 ## R interface to TPOT
-With TPOT-R we make automated Machine Learning based on the [Python Automated Machine Learning Tool](https://github.com/EpistasisLab/tpot) available in R. TPOT-R can be used both directly and via `mlr`.
+With *tpotr* automated machine learning based on the [Python Automated Machine Learning Tool](https://github.com/EpistasisLab/tpot) becomes available in R. Tree-based pipeline optimization can be utilized directly or as a `mlr` learner.
       
 ## Getting Started
 
 ### System Requirements
-TPOT-R works on macOS and Linux systems, that have a working installation of the python/R data science platform [Anaconda](https://www.anaconda.com/distribution/). 
+The package *tpotr* works on macOS and Linux systems, that have a working installation of the python/R data science platform [Anaconda](https://www.anaconda.com/distribution/). 
 
 ### Installation
-Make sure that in your R environment the `devtools`package is installed, or install it with:
+Make sure that the `devtools`package is installed, or install it with:
 ```r
 install.packages("devtools")
 ```
@@ -21,7 +21,7 @@ Now, install the tpotr R package from GitHub as follows:
 ```r
 devtools::install_github("thllwg/tpotr")
 ```
-The TPOT-R interface uses the reference TPOT python implementation as its backend. The required python libraries are installed during package load. On package load, the systems verifies the availability of the required dependencies and installs them (again) if necessary. Internally, `install_tpot()` is called for that. If the installation routine has been completed successfully, "Welcome to TPOT in R" appears in the console.
+The *tpotr* interface uses the reference TPOT python implementation as its backend. The required python libraries are installed during package load. On package load, the systems verifies the availability of the required dependencies and installs them (again) if necessary. Internally, `install_tpot()` is called for that. If the installation routine has been completed successfully, "Welcome to TPOT in R" appears in the console.
 
 ### Fitting a machine learning pipeline
 Below we walk through a simple example of using TPOT in R to fit a machine learning pipeline to predict the Species in the well-known `iris` dataset. After getting familiar with the basics, check out the tutorials and additional learning resources available as package vignettes.
@@ -56,7 +56,7 @@ score(classifier, test[1:4], test[5])
 ```
 
 ### Fitting a machine learning pipeline with mlr
-The TPOT-R package supports integration with the [Machine Learning in R](https://mlr.mlr-org.com/) package `mlr`. 
+The tpotr package supports integration with the [Machine Learning in R](https://mlr.mlr-org.com/) package `mlr`. 
 ```r
 library("mlr")
 train[5] <- as.factor(as.numeric(train[[5]]))
@@ -68,15 +68,15 @@ pred = predict(obj = model, newdata = test)
 performance(pred, measures = list(acc))
 ```
 
-### Regression with TPOT-R
-You can use TPOT-R in similar ways for regression tasks. Just exchange the `TPOTRClassifier`with the `TPOTRRegressor`. If you want to use TPOT-R with mlr for regression tasks, make sure to use the corresponding task, i.e. `makeRegrTask`.
+### Regression with tpotr
+You can use tpotr in similar ways for regression tasks. Just exchange the `TPOTRClassifier`with the `TPOTRRegressor`. If you want to use tpotr with mlr for regression tasks, make sure to use the corresponding task, i.e. `makeRegrTask`.
 
 ## Troubleshooting
-Currently there is a range of problems in TPOT-R. Not all of them are listed below:
+Currently there is a range of problems in tpotr. Not all of them are listed below:
   
 * During the training TPOT issues numerous warnings and deprecation messages.
 
-   TPOT-R is an interface for the underlying Python implementation of TPOT. It uses numerous Python libraries, some of which are in dependency conflicts. The (Python) TPOT authors are aware of the problem, some of the bugs should be fixed in the upcoming version (see [issue](https://github.com/EpistasisLab/tpot/issues/869))
+*tpotr* is an interface for the underlying Python implementation of TPOT. It uses numerous Python libraries, some of which are in dependency conflicts. The (Python) TPOT authors are aware of the problem, some of the bugs should be fixed in the upcoming version (see [issue](https://github.com/EpistasisLab/tpot/issues/869))
 
 * When training a regressor, TPOT terminates with the error message that the data is incorrectly formatted or the incorrect TPOT type (classifier) is in use.
 
@@ -85,3 +85,6 @@ Currently there is a range of problems in TPOT-R. Not all of them are listed bel
 * When using the mlr integration with `predict.type="prob"`, an error occurs after using the predict method.
 
    TPOT sometimes returns a pipeline that does not support class-probabilities in predictions. See the mlr examples in the corresponding `examples`folder on how to write a loop that fits a new model in such cases. 
+
+## Acknowledgements
+This package is based on the amazing work of Randal S. Olson et al. and the respective [github repository](https://github.com/EpistasisLab/tpot).
