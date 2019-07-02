@@ -1,0 +1,63 @@
+---
+title: "Configuration Dictionaries"
+author: "Thorben Hellweg"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette: 
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Configurations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Available TPOT Configuration
+
+TPOT comes with a handful of default operators and parameter configurations that work well for optimizing machine learning pipelines. For *tpotr* two of these are available: The default configuration and a light-weighted configuration.
+
+### Default TPOT 
+
+The default configuration for *tpotr* will search over a broad range of preprocessors, feature constructors, feature selectors, models, and parameters to find a series of operators that minimize the error of the model predictions. If you do not set a `config_dict`parameter, the default configuration is applied. However, some of these operators are complex and may take a long time to run, especially on larger datasets.
+
+
+### TPOT light 	
+
+For theses cases, the `config_dict="TPOT light"`will let TPOT search over a restricted range of preprocessors, feature constructors, feature selectors, models, and parameters to find a series of operators that minimize the error of the model predictions. The pipelines are simpler structured and only fast-running operators will be used. This configuration works for both the TPOTClassifier and TPOTRegressor.
+
+## Performance Comparison
+
+The effects of `config_dict` settings can be evaluated using microbenchmarking and prediction accuracy measurement.
+
+### Microbenchmarking
+Initially, it turns out that the TPOT light configuration runs much faster. 
+```{r mlr, message=FALSE}
+library("mlr")
+library("microbenchmark")
+library("tpotr")
+learner.default = makeLearner(cl = "classif.tpot", population_size = 20, 
+                              generations = 3, n_jobs = 3, verbosity = 2)
+learner.light = makeLearner(cl = "classif.tpot", population_size = 20, 
+                            generations = 3, n_jobs = 3, verbosity = 2, 
+                            config_dict = "TPOT light")
+microbenchmark(train(learner.default, iris.task), train(learner.light, iris.task), times = 5L)
+```
+
+
+### Accurancy
+The increased speed, however, is at the expense of prediction accuracy. 
+```{r}
+model.default = train(learner.default, iris.task)
+model.light = train(learner.default, iris.task)
+pred.default = predict(model.default, newdata = iris)
+pred.light = predict(model.light, newdata = iris)
+data.frame(default = unname(performance(pred.default, measures = list(acc))),
+           light = unname(performance(pred.light, measures = list(acc))))
+
+```
+
+## Final remarks
+The choice of `config_dict` must therefore depend on the time available to calculate the pipeline, as well as on the required accuracy. If computing time is available "unlimited", the default configuration should be used. However, if it is necessary to achieve sufficiently good results quickly, the *TPOT light* configuration can be used.
