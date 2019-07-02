@@ -6,13 +6,15 @@ output:
   rmarkdown::html_vignette: 
     fig_caption: yes
 vignette: >
-  %\VignetteIndexEntry{Introduction}
+  %\VignetteIndexEntry{Configurations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+TRAVIS <- !identical(tolower(Sys.getenv("TRAVIS")), "true")
+knitr::opts_chunk$set(purl = TRAVIS)
 ```
 
 ## Available TPOT Configuration

@@ -25,7 +25,8 @@ Imports:
     BBmisc,
     yaml,
     stats,
-    stringr
+    stringr,
+    microbenchmark
 Suggests: 
     testthat,
     knitr,
