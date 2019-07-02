@@ -44,10 +44,14 @@ install_tpot <- function(method = c("auto", "conda"),
          "Installation is available for OS X and Linux only.")
   }
 
-  # resolve and validate method #can be used to install into virtualenv at a later time
+  # resolve and validate method
+  #can be used to install into virtualenv at a later time
   method <- match.arg(method)
 
   conda_path = reticulate::conda_binary(conda = conda)
+  if (is.null(conda_path)) {
+    stop("Could not find location of main conda binary. Please make sure Anaconda is installed!")
+  }
   python_path = reticulate::conda_list(conda = conda)[1,]
 
   # create conda env
@@ -81,7 +85,6 @@ parse_tpot_version <- function(version) {
     packages = NULL
   )
 
-  # full url provided
   if (identical(version, "default")) {
     ver$version <- "0.10.0"
   } else {
