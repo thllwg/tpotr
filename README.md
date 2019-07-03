@@ -85,6 +85,9 @@ Currently there is a range of problems in tpotr. Not all of them are listed belo
 * When using the mlr integration with `predict.type="prob"`, an error occurs after using the predict method.
 
    TPOT sometimes returns a pipeline that does not support class-probabilities in predictions. See the mlr examples in the corresponding `examples`folder on how to write a loop that fits a new model in such cases. 
+   
+## Documentation
+You can read more about *tpotr* and its application in AutoML in the corresponding [docs])(https://thllwg.github.io/tpotr).
 
 ## Acknowledgements
 This package is based on the amazing work of Randal S. Olson et al. and the respective [github repository](https://github.com/EpistasisLab/tpot).
