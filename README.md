@@ -88,3 +88,9 @@ Currently there is a range of problems in tpotr. Not all of them are listed belo
 
 ## Acknowledgements
 This package is based on the amazing work of Randal S. Olson et al. and the respective [github repository](https://github.com/EpistasisLab/tpot).
+
+## Authors
+
+* **Thorben Hellweg** - [thllwg](https://github.com/thllwg)
+* **Christopher Olbrich** - [ChristopherOlbrich](https://github.com/ChristopherOlbrich) 
+* **Christian Werner** - [Bl7tzcrank](https://github.com/Bl7tzcrank)
