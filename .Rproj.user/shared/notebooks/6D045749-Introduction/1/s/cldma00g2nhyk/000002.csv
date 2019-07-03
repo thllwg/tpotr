@@ -1,0 +1,42 @@
+"0","fit(classifier, train[1:4], train[5])
+"
+"2","/home/thllwg/anaconda3/envs/r-tpot/lib/python3.7/site-packages/sklearn/utils/validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  y = column_or_1d(y, warn=True)
+Optimization Progress:   0%|          | 0/90 [00:00<?, ?pipeline/s]"
+"2","Optimization Progress:   1%|          | 1/90 [00:02<03:13,  2.18s/pipeline]"
+"2","Optimization Progress:  14%|█▍        | 13/90 [00:02<01:57,  1.53s/pipeline]"
+"2","Optimization Progress:  18%|█▊        | 16/90 [00:04<01:32,  1.25s/pipeline]"
+"2","Optimization Progress:  31%|███       | 28/90 [00:04<00:55,  1.13pipeline/s]"
+"2","                                                                            "
+"2","Optimization Progress:  33%|███▎      | 30/90 [00:04<00:53,  1.13pipeline/s]"
+"2","Optimization Progress:  33%|███▎      | 30/90 [00:05<00:44,  1.34pipeline/s]"
+"2","Optimization Progress:  36%|███▌      | 32/90 [00:06<00:43,  1.33pipeline/s]"
+"2","Optimization Progress:  48%|████▊     | 43/90 [00:08<00:27,  1.73pipeline/s]"
+"2","                                                                            "
+"2","Optimization Progress:  50%|█████     | 45/90 [00:08<00:26,  1.73pipeline/s]"
+"2","Optimization Progress:  50%|█████     | 45/90 [00:09<00:18,  2.37pipeline/s]"
+"2","Optimization Progress:  52%|█████▏    | 47/90 [00:14<00:45,  1.05s/pipeline]"
+"2","Optimization Progress:  64%|██████▍   | 58/90 [00:16<00:25,  1.25pipeline/s]"
+"2","                                                                            "
+"2","Optimization Progress:  67%|██████▋   | 60/90 [00:16<00:24,  1.25pipeline/s]"
+"2","Optimization Progress:  67%|██████▋   | 60/90 [00:16<00:17,  1.72pipeline/s]"
+"2","Optimization Progress:  68%|██████▊   | 61/90 [00:20<00:49,  1.70s/pipeline]"
+"2","Optimization Progress:  81%|████████  | 73/90 [00:22<00:20,  1.23s/pipeline]"
+"2","                                                                            "
+"2","Optimization Progress:  83%|████████▎ | 75/90 [00:22<00:18,  1.23s/pipeline]"
+"2","Optimization Progress:  83%|████████▎ | 75/90 [00:22<00:13,  1.14pipeline/s]"
+"2","Optimization Progress:  86%|████████▌ | 77/90 [00:23<00:09,  1.33pipeline/s]"
+"2","Optimization Progress:  87%|████████▋ | 78/90 [00:25<00:14,  1.22s/pipeline]"
+"2","                                                                            "
+"2","Optimization Progress: 100%|██████████| 90/90 [00:25<00:00,  1.22s/pipeline]"
+"2","                                                                            "
+"1","Generation 1 - Current best internal CV score: 0.9639610389610389
+Generation 2 - Current best internal CV score: 0.9718614718614719
+Generation 3 - Current best internal CV score: 0.9718614718614719
+Generation 4 - Current best internal CV score: 0.9718614718614719
+Generation 5 - Current best internal CV score: 0.9718614718614719
+
+Best pipeline: RandomForestClassifier(RBFSampler(input_matrix, gamma=0.9), bootstrap=False, criterion=entropy, max_features=1.0, min_samples_leaf=12, min_samples_split=2, n_estimato"
+"1","rs=100)
+
+"

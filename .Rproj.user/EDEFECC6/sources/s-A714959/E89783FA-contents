@@ -1,0 +1,22 @@
+library("mlr")
+library("microbenchmark")
+data(iris)
+# 75% of the sample size
+smp_size <- floor(0.75 * nrow(iris))
+# set the seed to make your partition reproducible
+set.seed(123)
+train_ind <- sample(seq_len(nrow(iris)), size = smp_size)
+
+train <- iris[train_ind, ]
+test <- iris[-train_ind, ]
+train[5] <- as.factor(as.numeric(train[[5]]))
+test[5] <- as.factor(as.numeric(test[[5]]))
+
+task = makeClassifTask(data = train, target = "Species", id = "iris")
+learner = makeLearner(cl = "classif.tpot", population_size = 20, generations = 3, n_jobs = 3, verbosity = 2)
+learner.light = makeLearner(cl = "classif.tpot", population_size = 20, generations = 3, n_jobs = 3, verbosity = 2, config_dict = "TPOT light")
+
+microbenchmark(train(learner, task), train(learner.light, task), times = 1L)
+pred = predict(obj = model, newdata = test)
+performance(pred, measures = list(acc))
+printPipeline(model)

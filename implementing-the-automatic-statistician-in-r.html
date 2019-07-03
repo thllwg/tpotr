@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Implementing the Automatic Statistician in R | TPOT and the Automated Statistician</title>
+  <meta name="description" content="This is a seminar paper describing the R-based implementation of a tree-based pipeline optimization tool and an automated statistician" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Implementing the Automatic Statistician in R | TPOT and the Automated Statistician" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a seminar paper describing the R-based implementation of a tree-based pipeline optimization tool and an automated statistician" />
+  <meta name="github-repo" content="thllwg/tpotr" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Implementing the Automatic Statistician in R | TPOT and the Automated Statistician" />
+  
+  <meta name="twitter:description" content="This is a seminar paper describing the R-based implementation of a tree-based pipeline optimization tool and an automated statistician" />
+  
+
+<meta name="author" content="Thorben Hellweg" />
+<meta name="author" content="Christopher Olbrich" />
+<meta name="author" content="Christian Werner" />
+
+
+<meta name="date" content="2019-07-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="tree-based-pipeline-optimization-with-tpot.html">
+<link rel="next" href="conclusion.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html">Automated Machine Learning</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="tree-based-pipeline-optimization-with-tpot.html"><a href="tree-based-pipeline-optimization-with-tpot.html"><i class="fa fa-check"></i><b>2</b> Tree-Based Pipeline Optimization With TPOT</a><ul>
+<li class="chapter" data-level="2.1" data-path="tree-based-pipeline-optimization-with-tpot.html"><a href="tree-based-pipeline-optimization-with-tpot.html#tree-based-pipeline-optimization-tool"><i class="fa fa-check"></i><b>2.1</b> Tree-Based Pipeline Optimization Tool</a></li>
+<li class="chapter" data-level="2.2" data-path="tree-based-pipeline-optimization-with-tpot.html"><a href="tree-based-pipeline-optimization-with-tpot.html#from-theory-to-practise-implementing-a-tree-based-pipeline-optimization-tool"><i class="fa fa-check"></i><b>2.2</b> From Theory to Practise: Implementing a Tree-Based Pipeline Optimization Tool</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="tree-based-pipeline-optimization-with-tpot.html"><a href="tree-based-pipeline-optimization-with-tpot.html#an-r-wrapper-for-tpot"><i class="fa fa-check"></i><b>2.2.1</b> An R-Wrapper for TPOT</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html"><i class="fa fa-check"></i><b>3</b> Implementing the Automatic Statistician in R</a><ul>
+<li class="chapter" data-level="3.1" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html#the-automatic-statistician-a-philiosphy-for-automating-machine-learning"><i class="fa fa-check"></i><b>3.1</b> The Automatic Statistician: A philiosphy for automating machine learning</a></li>
+<li class="chapter" data-level="3.2" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html#examples-of-automatic-statisticians"><i class="fa fa-check"></i><b>3.2</b> Examples of Automatic Statisticians</a></li>
+<li class="chapter" data-level="3.3" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html#model-agnostic-methods"><i class="fa fa-check"></i><b>3.3</b> Model-agnostic methods</a></li>
+<li class="chapter" data-level="3.4" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html#autostatr-an-automatic-statistician-for-the-r-language"><i class="fa fa-check"></i><b>3.4</b> AutoStatR: An Automatic Statistician for the R language</a></li>
+<li class="chapter" data-level="3.5" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html#challenges-of-the-automatic-statistician"><i class="fa fa-check"></i><b>3.5</b> Challenges of the Automatic Statistician</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>4</b> Conclusion</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/thllwg/tpotr" target="blank">Get <i>tpotr</i></a></li>
+<li><a href="https://github.com/thllwg/tpotr" target="blank">Get <i>autostatr</i></a></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">TPOT and the Automated Statistician</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="implementing-the-automatic-statistician-in-r" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Implementing the Automatic Statistician in R</h1>
+<p>This chapter focuses on the Automatic Statistician project which introduces report generating automats for data science incorporating declarative statistics, automated construction and natural language explanation <span class="citation">(Steinruecken et al. <a href="#ref-Steinruecken19">2019</a>)</span>. In the following, the key characteristics which make up an Automatic Statistician are highlighted. Then, various implementations of the Automatic Statistician are presented. Among others, this includes an Automatic Statistician for the R language (<em>AutoStatR</em>) that was implemented in the context of this seminar paper. Last, challenges and limitations of the Automatic Statistician are explored with one eye on the experience gained when implementing <em>AutoStatR</em>.</p>
+<div id="the-automatic-statistician-a-philiosphy-for-automating-machine-learning" class="section level2">
+<h2><span class="header-section-number">3.1</span> The Automatic Statistician: A philiosphy for automating machine learning</h2>
+<p>In 2014, a project called “The Automatic Statistician” won the $750,000 Google Focused Research Award <span class="citation">(CambridgeUniversity <a href="#ref-Cambridge14">2014</a>)</span>. The project, lead by Zoubin Ghahramani, aims to reduce the dozens of man-hour and high-value expertise that are required to select the best combination of models and parameters by automating the process of data science. More than that, the Automatic Statistician produces predictions and human-readable reports from raw datasets while reducing the necessity of human intervention. It consists of several components as described by <span class="citation">(Steinruecken et al. <a href="#ref-Steinruecken19">2019</a>)</span>:</p>
+<ul>
+<li>Basic graphs and statistics: A first overview of the dataset’s features is provided. It can be used to prove that the dataset was loaded correctly.</li>
+<li>Automated construction of models: A suitable model has to be selected from a fixed or open-ended set of models. This model is then trained on the provided dataset.</li>
+<li>Explanation of the model: The patterns that have been found are explained to the user. There is a certain degree of interpretation.</li>
+<li>Report curator: A software component that turns these results into a human-readable report. The content of the report fully depends on the dataset and evaluated models. It should give insights about the data to a larger group of people.</li>
+</ul>
+<p>Over the years, multiple versions of the Automatic Statistician have been build by different people. Each of them has a slightly different purpose, but all of them incorporate the philosophy of the Automatic Statistician and intend to automate data science <span class="citation">(Steinruecken et al. <a href="#ref-Steinruecken19">2019</a>)</span>. In the next section, there is an overview about what research has shown regarding the Automatic Statistician so far.</p>
+</div>
+<div id="examples-of-automatic-statisticians" class="section level2">
+<h2><span class="header-section-number">3.2</span> Examples of Automatic Statisticians</h2>
+<p>Over the time, since the Automatic Statistician was announced, numerous authors have contributed to the project with their individual work. For example, <span class="citation">(Lloyd et al. <a href="#ref-lloyd2014automatic">2014</a>)</span> present an Automatic Statistician for regression which explores an open-ended space of models to produce a natural-language report, that was also mentioned by <span class="citation">(Steinruecken et al. <a href="#ref-Steinruecken19">2019</a>)</span>. They make use of Gaussian Processes and their strength of modelling high-level properties of functions (e.g. smoothness, trends, periodicity) which can be used directly for the model explanation. <span class="citation">(Hwang, Tong, and Choi <a href="#ref-hwang2015a">2015</a>)</span> proceed similar, but construct natural-language descriptions of time-series data. They also make use of Gaussian Processes. While most papers focus on an Automatic Statistician for regression, there has been done research on classification problems as well. <span class="citation">(Mrkšić <a href="#ref-mrksic2014a">2014</a>)</span> makes use of earlier work on regression problems with Gaussian Processes and contributes to the project by implementing a model search procedure for classification problems.
+Clearly, there has been done a lot of research on the Automatic Statistician already. Various authors focused on different types of problems all incorporating the ability of generating human-readable reports. The focus in research done so far was mainly on Gaussian Processes. They provide direct model explanation while constructing the model <span class="citation">(Lloyd et al. <a href="#ref-lloyd2014automatic">2014</a>)</span>. Models which incorporate this properties are called interpretable models <span class="citation">(Molnar <a href="#ref-molnar2019">2019</a>)</span>. Interpretability in this context can be seen as “the degree to which an observer can understand the cause of a decision” <span class="citation">(Miller <a href="#ref-Miller2019ExplanationIA">2019</a>)</span> of a machine learning model. While interpretable model provide an easy way of achieving interpretability, they also suffer in terms of flexibility, as each model yields different types of interpretion and thereby binds the developer to the selected model type <span class="citation">(Molnar <a href="#ref-molnar2019">2019</a>)</span>. Indeed, there is a method which provides more flexibility in terms of model selection, model-agnostic methods.
+This approach was selected for the Automatic Statistician presented in this paper and it is explained in more detail in the subsequent section.</p>
+</div>
+<div id="model-agnostic-methods" class="section level2">
+<h2><span class="header-section-number">3.3</span> Model-agnostic methods</h2>
+<p>Model-agnostic methods challenge the task of interpreting and explaining any machine learning models including those that appear as a black box <span class="citation">(Molnar <a href="#ref-molnar2019">2019</a>)</span>. While some machine learning models already incorporate a certain degree of interpretability (such as decision trees), others do clearly not [<span class="citation">Molnar (<a href="#ref-molnar2019">2019</a>)</span>}. In the latter case, model-agnostic methods can be used to seperate the explanation from the machine learning model. These methods are applied to the already optimized machine learning model and provide insights about its behaviour to the developer. They have the advantage that developers are free to select their machine learning model and do not have to choose a fixed model (e.g. Gaussian Processes) which might not be suitable for a certain use case <span class="citation">(Molnar <a href="#ref-molnar2019">2019</a>)</span>. Model-agnostic methods leverage the strength and diversity of the full range of machine learning models while still providing a degree of explanability. In the next section, this alternative approach is used in an Automatic Statistician for the R language.</p>
+</div>
+<div id="autostatr-an-automatic-statistician-for-the-r-language" class="section level2">
+<h2><span class="header-section-number">3.4</span> AutoStatR: An Automatic Statistician for the R language</h2>
+<p>While Automatic Statisticians so far have been implemented using interpretable models (specifically Gaussian Processes), we introduce an Automatic Statistician build with model-agnostic methods. This R package can use a great variety of different machine learning models and still provide interpretability to the user by exploiting the strength of model-agnostic methods. It follows the philosophy, includes the key components of an Automatic Statistician as presented by <span class="citation">(Steinruecken et al. <a href="#ref-Steinruecken19">2019</a>)</span> and can be applied to solve classification problems. Further, it summarizes a data set, re-uses the R-version of TPOT (<em>tpotr</em>) to build a machine learning model, explains this model through model-agnostic methods and outputs an HTML report. In the following subsections the implementation of the four core components of an Automatic Statistician in <em>AutoStatR</em> is described.</p>
+<div id="data-set-overview" class="section level4">
+<h4><span class="header-section-number">3.4.0.1</span> Data set overview</h4>
+<p>The first component provides an <em>overview</em> of the data set that is loaded into the Automatic Statistician. For this purpose, the package <em>summarytools</em><a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> is used. It provides methods for a quick and simple overview of all the features and feature values in the data set and visualizes them in a table format. The following information are provided:</p>
+<ul>
+<li>The number of the feature indicating the order in which it appears in the dataset</li>
+<li>The name of the feature and its class</li>
+<li>An insight into the feature’s values. The frequency, proportions or number of distinct values</li>
+<li>A histogram or barplot of the feature’s values</li>
+<li>The number and proportion of valid and missing values in the feature.</li>
+</ul>
+</div>
+<div id="machine-learning-model-construction" class="section level4">
+<h4><span class="header-section-number">3.4.0.2</span> Machine learning model construction</h4>
+<p>The second component deals with the <em>search and evaluation of machine learning models</em>. Other than proposed by <span class="citation">(Steinruecken et al. <a href="#ref-Steinruecken19">2019</a>)</span> who make use of Gaussian Processes, any machine learning model might be used in <em>AutoStatR</em>. We want to use a model that fits the input data set best and not restrict the range of selectable models. This is possible because we split the model search and the model interpretation as described in the previous chapter as model-agnostic methods. Theoretically, <em>AutoStatR</em> can select any interpretable as well as black-box model. Because <em>AutoStatR</em> uses the R implementation of TPOT <em>tpotr</em>, which was introduced previously, it is limited to the models included in the TPOT package.
+Although the approach of model-agnostic explanation is significantly different from the interpretable Gaussian Processes approach, TPOT fulfills three of the four key ingredients of model search and evaluation introduced by <span class="citation">(Steinruecken et al. <a href="#ref-Steinruecken19">2019</a>)</span>:</p>
+<p>First, the open ended language of models is provided by TPOT, because it uses various machine learning operators and models and can construct arbitrary pipelines from them to represent different real world phenomena. Second, TPOT provides a search procedure using genetic programming to explore the language of models. Third, TPOT provides a principled method of evaluating models through genetic programming, which trades of model complexity and fit to data. This is ensured by the NSGA-II selection schema in TPOT (see chapter 2.1). The fourth ingredient “automatic explanation” is not provided by TPOT itself, but by the model-agnostic explanation approach.</p>
+</div>
+<div id="model-interpretation" class="section level4">
+<h4><span class="header-section-number">3.4.0.3</span> Model interpretation</h4>
+<p>After gaining an overview over the data set and constructing a machine learning model, the third component of the <em>AutoStatR</em> deals with the <em>model explanation and interpretation</em>. Any Automatic Statistician should be able to make the assumptions of the model explicit to the user in an accurate and intelligible way <span class="citation">(Steinruecken et al. <a href="#ref-Steinruecken19">2019</a>)</span>.</p>
+<p>Since the machine learning pipelines generated by TPOT are generally black-box machine learning models, the assumptions of the model can only be made explicit through the usage of model-agnostic methods. The book Interpretable Machine Learning <span class="citation">(Molnar <a href="#ref-molnar2019">2019</a>)</span> provides an overview of such methods with respective implementations in R. From the model-agnostic methods described in the book, three where found to be suitable for usage in a report.</p>
+<p>Feature importance is selected as the first method for model interpretation, because it offers a conceptually easy to understand interpretation and a compressed global insight into the model. As the first method being displayed in the <em>AutoStatR</em> report it offers a good entry point for the user. Feature importance is measured as the increase in the prediction error of the model after the feature was permuted. Therefore, feature importance can also be interpreted as the increase in the model error, when a feature is destroyed <span class="citation">(Molnar <a href="#ref-molnar2019">2019</a>)</span>.</p>
+<p>As the second method accumulated local affects (ALE) are selected, because they describe how an individual feature influences the prediction of the model on average. Thus, ALE offer a more detailed insight into the model than feature importance. Compared to similar methods like partial dependency plots, ALE offer the advantage of providing an unbiased influence if features are correlated <span class="citation">(Molnar <a href="#ref-molnar2019">2019</a>)</span>. In <em>AutoStatR</em>, the two most important features are selected based on the feature importance analysis and subsequently ALE are applied for these features.</p>
+<p>Lime is selected as the third method. It also provides the most detailed insight into the model, because it looks at individual observations and can therefore be categorized as an interpretable local surrogate model <span class="citation">(Molnar <a href="#ref-molnar2019">2019</a>)</span>. Lime helps to explain the decision of the model for individual observations. Consequently, Lime is used in <em>AutoStatR</em> to explain the decisions of the model for the provided test data.</p>
+</div>
+<div id="report-curator" class="section level4">
+<h4><span class="header-section-number">3.4.0.4</span> Report curator</h4>
+<p>The last component of <em>AutoStatR</em> is the report curator which wraps the results from the previously explained components in an HTML report. It contains the data set overview, the best fitting model and model explanation. It is based on graphs, tables and natural language descriptions which aims to enhance the comprehensibility for non-experts.</p>
+<p>Technically, the report curator is located in the file <em>/inst/rmarkdown/report.rmd</em> and is called from the method <code>autostatr()</code> in <em>/R/main.R</em>, when the user starts <em>AutoStatR</em>. The user provides the data set for training, the input data for which the <em>AutoStatR</em> should make predictions, and the target variable. Subsequently, the report is generated automatically.</p>
+<p>One challenge of the report curator is to generate natural-language descriptions, especially when taking into consideration that the provided data set can have an arbitrary size and the target column can have an arbitrary amount of levels. How this is handled by the report curator is demonstrated exemplary for the description of the first ALE plot in the following. \</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(levels)){
+  level &lt;-<span class="st"> </span>levels[i]
+  temp.result2 &lt;-<span class="st"> </span><span class="kw">subset</span>(temp.result, .class <span class="op">==</span><span class="st"> </span>level)
+  ale.desc[i] &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;The class &quot;</span>, <span class="st">&quot;&lt;b&gt;&quot;</span>, level, <span class="st">&quot;&lt;/b&gt;&quot;</span>, <span class="st">&quot; is based on the feature &quot;</span>, <span class="st">&quot;&lt;b&gt;&quot;</span>, first.feature, <span class="st">&quot;&lt;/b&gt;&quot;</span>, <span class="st">&quot; most likely for values between &quot;</span>, temp.result[[<span class="dv">1</span>,<span class="st">&quot;min&quot;</span>]], <span class="st">&quot; and &quot;</span>, <span class="kw">paste0</span>(temp.result[[<span class="dv">1</span>,<span class="st">&quot;max&quot;</span>]], <span class="st">&quot;. &quot;</span>))
+}</code></pre>
+<!-- \begin{lstlisting}[language=R, caption={Generation of a description in AutoStatR}, captionpos=b] -->
+<!-- \end{lstlisting} -->
+<p>Listing 3 shows how the dynamic description is generated. The variable <code>temp.result</code> contains the result of the ALE for the most important feature. More precisely <code>temp.result</code> contains all target class levels that are most likely within a given range of the most important feature. The for loop iterates over these levels and generates a respective natural-language description for every level.</p>
+<pre class="hmtl"><code>&lt;p&gt;For the given classification problem the most important feature according to the feature importance analysis  is &lt;b&gt;`r paste(imp.features[1], sep = &quot;, &quot;)`&lt;/b&gt;. The ALE-plot provides an analysis how this feature influences the target &lt;b&gt;`r target`&lt;/b&gt; with its `r length(levels)` classes. `r paste(ale.desc, collapse=&quot;&quot;)`&lt;/p&gt;</code></pre>
+<!-- \begin{lstlisting}[language=HTML, caption={HTML source code with dynamic variables}, captionpos=b] -->
+<p>This generated description, which is saved in <code>ale.desc</code> is then used among other variables in the HTML source code of the report as it can be seen in Listing 4.</p>
+</div>
+</div>
+<div id="challenges-of-the-automatic-statistician" class="section level2">
+<h2><span class="header-section-number">3.5</span> Challenges of the Automatic Statistician</h2>
+<p>Due to conceptually ambitious design of Automatic Statisticians, the implementation of AutoStatR was faced by a variety of challenges, of which some remain open for future research. <span class="citation">(Steinruecken et al. <a href="#ref-Steinruecken19">2019</a>)</span> already list several design challenges that go along with the implementation of an Automatic Statistician:</p>
+<ul>
+<li>User interaction: The user should be able to interact with the system and influence the choices it makes. The system than engages a dialogue with the user to explain the results that were found.</li>
+<li>Missing and messy data: Some machine learning models struggle with missing data values and other defects on the data set. Therefore, automatic data pre-processing is an important requirement.</li>
+<li>Resource allocation: Resource constraints such as limited computer power or limited time should be handled by the Automatic Statistician.</li>
+</ul>
+<p>While TPOT incorporates mechanisms for resource allocation such as processing time restriction and also pre-processes the data in it’s pipelines up to a certain degree (e.g. feature selection), user interaction is still outstanding for <em>AutoStatR</em>. This is because an adequate user interaction requires technology that can provide a user experience such as a web-technology-based solution. Since <em>AutoStatR</em> is an R package, user interaction might be build on top of it. Apart from that, two main challenges remain that were observed during the development and testing of <em>AutoStatR</em> which we want to highlight in the following.</p>
+<div id="data-input" class="section level4">
+<h4><span class="header-section-number">3.5.0.1</span> Data input</h4>
+<p>Data sets that are given to an Automatic Statistician can be of arbitrary size and quality. First of all, they can range from a few features and observations up to thousands of features and million of rows. Since the output of an Automatic Statistician is a report, this report suffers if data size gets to large because the amount of visualized content gets very complex. The question is whether the report is still a suitable output format to deal with massive data sets. Second, data pre-processing sometimes requires a large amount of manual work which makes up to 70% of all the efforts done in data science projects. The problem is that missing or dirty data in data sets can be so diverse, ranging from missing values over wrong values to miss-spelled column names, that automatic pre-processing can be a project on its own. Of course, missing data can be re-generated through automatic data imputation, but bad data quality is so much more than only missing values and it should be possible for the user to also intervene manually.</p>
+</div>
+<div id="trade-off-between-model-fit-and-interpretability" class="section level4">
+<h4><span class="header-section-number">3.5.0.2</span> Trade-off between model fit and interpretability</h4>
+<p>The second point that we want to mention here relates to the principle of model-agnostic methods that was used in <em>AutoStatR</em>. We already mentioned that model-agnostic methods are significantly different from using interpretable machine learning models. Clearly, there is a tradeoff to be made. While interpretable models best explain the inner dependencies of the model but restrict the repertoire of models to select from, the model-agnostic approach might use any machine learning model, but yields less sophisticated explanations if the model gets to complex <span class="citation">(Molnar <a href="#ref-molnar2019">2019</a>)</span>.</p>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Cambridge14">
+<p>CambridgeUniversity. 2014. “Google awards $ 750.000 for The Automatic Statistician.” 2014. <a href="http://mlg.eng.cam.ac.uk/?p=1578">http://mlg.eng.cam.ac.uk/?p=1578</a>.</p>
+</div>
+<div id="ref-hwang2015a">
+<p>Hwang, Yunseong, Anh Tong, and Jaesik Choi. 2015. “The Automatic Statistician: A Relational Perspective.” arXiv:1511.08343 [cs.LG].</p>
+</div>
+<div id="ref-lloyd2014automatic">
+<p>Lloyd, James Robert, David Duvenaud, Roger Grosse, Joshua Tenenbaum, and Zoubin Ghahramani. 2014. “Automatic Construction and Natural-Language Description of Nonparametric Regression Models.” In <em>Twenty-Eighth Aaai Conference on Artificial Intelligence</em>.</p>
+</div>
+<div id="ref-Miller2019ExplanationIA">
+<p>Miller, Tim. 2019. “Explanation in Artificial Intelligence: Insights from the Social Sciences.” <em>Artif. Intell.</em> 267: 1–38.</p>
+</div>
+<div id="ref-molnar2019">
+<p>Molnar, Christoph. 2019. <em>Interpretable Machine Learning: A Guide for Making Black Box Models Explainable</em>.</p>
+</div>
+<div id="ref-mrksic2014a">
+<p>Mrkšić, Nikola. 2014. “Kernel Structure Discovery for Gaussian Process Classification.” Master’s thesis, Computer Laboratory, University of Cambridge.</p>
+</div>
+<div id="ref-Steinruecken19">
+<p>Steinruecken, Smith, Janz, Lloyd, and Ghahramani. 2019. “The Automatic Statistician.” In <em>Automated Machine Learning</em>. Springer.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="8">
+<li id="fn8"><p><a href="https://github.com/dcomtois/summarytools" class="uri">https://github.com/dcomtois/summarytools</a><a href="implementing-the-automatic-statistician-in-r.html#fnref8" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="tree-based-pipeline-optimization-with-tpot.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/02-autostatr.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

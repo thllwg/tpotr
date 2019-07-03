@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Introduction | TPOT and the Automated Statistician</title>
+  <meta name="description" content="This is a seminar paper describing the R-based implementation of a tree-based pipeline optimization tool and an automated statistician" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Introduction | TPOT and the Automated Statistician" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a seminar paper describing the R-based implementation of a tree-based pipeline optimization tool and an automated statistician" />
+  <meta name="github-repo" content="thllwg/tpotr" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Introduction | TPOT and the Automated Statistician" />
+  
+  <meta name="twitter:description" content="This is a seminar paper describing the R-based implementation of a tree-based pipeline optimization tool and an automated statistician" />
+  
+
+<meta name="author" content="Thorben Hellweg" />
+<meta name="author" content="Christopher Olbrich" />
+<meta name="author" content="Christian Werner" />
+
+
+<meta name="date" content="2019-07-01" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html">
+<link rel="next" href="literature.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="literature.html"><a href="literature.html"><i class="fa fa-check"></i><b>3</b> Literature</a></li>
+<li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a></li>
+<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a><ul>
+<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
+<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">TPOT and the Automated Statistician</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="intro" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> Introduction</h1>
+<p>Machine learning has gained in importance over the last years. While machine learning shows promising results in many problem domains, the complexity of machine learning is often an obstacle for its application. This development has given rise to the research field automated machine learning (AutoML) that investigates the problem of “automatically (without human input) producing test set predictions for a new dataset within a fixed computational budget” <span class="citation">(Feurer et al. <a href="#ref-feurer2015efficient">2015</a>)</span>. Characteristics of machine learning like the non-existence of a machine-learning method that performs best on all data sets and the need for hyperparameter optimization has lead to the development of a diverse set of AutoML methods and systems. The book <em>Automatic Machine Learning</em> <span class="citation">(Hutter, Kotthoff, and Vanschoren <a href="#ref-automl">2018</a>)</span> provides an excellent overview of selected AutoML methods and systems.</p>
+<p>While the AutoML methods and systems cover a lot of use cases, their different user interfaces and used programing languages contradict the idea of AutoML, which should be easy to use for different addressees. The availability of the AutoML methods and systems in a uniform programmin language like R could help to facilitate their application and comparison.</p>
+<p>In the described context this reports goal is to investigate the two AutoML methods TPOT and the Automatic Statistician and to document their implementation in R. TPOTs goal is to automate all steps of machine learning after preprocessing was done by generating and optimizing machine learning pipelines [olson_tpot_2018]. The Automatic Statistician wants to automate all steps of machine learning with the special focus of making the predictions available in a human-readable report including graphs and statistics [Steinruecken19].</p>
+<p>To reach this goal both AutoML systems are introduced separately in chapter 2 (TPOT) and chapter 3 (The Automatic Statistician). For each system the core theoretical concept is described, followed by an description of the implementation in R. In the conclusion of this report, a final evaluation of the individual methods and implementations in the context of AutoML’s objectives is made.</p>
+
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-feurer2015efficient">
+<p>Feurer, Matthias, Aaron Klein, Katharina Eggensperger, Jost Springenberg, Manuel Blum, and Frank Hutter. 2015. “Efficient and Robust Automated Machine Learning.” In <em>Advances in Neural Information Processing Systems</em>, 2962–70.</p>
+</div>
+<div id="ref-automl">
+<p>Hutter, Frank, Lars Kotthoff, and Joaquin Vanschoren, eds. 2018. <em>Automatic Machine Learning: Methods, Systems, Challenges</em>. Springer.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="literature.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

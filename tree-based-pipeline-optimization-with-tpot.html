@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Tree-Based Pipeline Optimization With TPOT | TPOT and the Automated Statistician</title>
+  <meta name="description" content="This is a seminar paper describing the R-based implementation of a tree-based pipeline optimization tool and an automated statistician" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Tree-Based Pipeline Optimization With TPOT | TPOT and the Automated Statistician" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a seminar paper describing the R-based implementation of a tree-based pipeline optimization tool and an automated statistician" />
+  <meta name="github-repo" content="thllwg/tpotr" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Tree-Based Pipeline Optimization With TPOT | TPOT and the Automated Statistician" />
+  
+  <meta name="twitter:description" content="This is a seminar paper describing the R-based implementation of a tree-based pipeline optimization tool and an automated statistician" />
+  
+
+<meta name="author" content="Thorben Hellweg" />
+<meta name="author" content="Christopher Olbrich" />
+<meta name="author" content="Christian Werner" />
+
+
+<meta name="date" content="2019-07-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html">
+<link rel="next" href="implementing-the-automatic-statistician-in-r.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html">Automated Machine Learning</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="tree-based-pipeline-optimization-with-tpot.html"><a href="tree-based-pipeline-optimization-with-tpot.html"><i class="fa fa-check"></i><b>2</b> Tree-Based Pipeline Optimization With TPOT</a><ul>
+<li class="chapter" data-level="2.1" data-path="tree-based-pipeline-optimization-with-tpot.html"><a href="tree-based-pipeline-optimization-with-tpot.html#tree-based-pipeline-optimization-tool"><i class="fa fa-check"></i><b>2.1</b> Tree-Based Pipeline Optimization Tool</a></li>
+<li class="chapter" data-level="2.2" data-path="tree-based-pipeline-optimization-with-tpot.html"><a href="tree-based-pipeline-optimization-with-tpot.html#from-theory-to-practise-implementing-a-tree-based-pipeline-optimization-tool"><i class="fa fa-check"></i><b>2.2</b> From Theory to Practise: Implementing a Tree-Based Pipeline Optimization Tool</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="tree-based-pipeline-optimization-with-tpot.html"><a href="tree-based-pipeline-optimization-with-tpot.html#an-r-wrapper-for-tpot"><i class="fa fa-check"></i><b>2.2.1</b> An R-Wrapper for TPOT</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html"><i class="fa fa-check"></i><b>3</b> Implementing the Automatic Statistician in R</a><ul>
+<li class="chapter" data-level="3.1" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html#the-automatic-statistician-a-philiosphy-for-automating-machine-learning"><i class="fa fa-check"></i><b>3.1</b> The Automatic Statistician: A philiosphy for automating machine learning</a></li>
+<li class="chapter" data-level="3.2" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html#examples-of-automatic-statisticians"><i class="fa fa-check"></i><b>3.2</b> Examples of Automatic Statisticians</a></li>
+<li class="chapter" data-level="3.3" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html#model-agnostic-methods"><i class="fa fa-check"></i><b>3.3</b> Model-agnostic methods</a></li>
+<li class="chapter" data-level="3.4" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html#autostatr-an-automatic-statistician-for-the-r-language"><i class="fa fa-check"></i><b>3.4</b> AutoStatR: An Automatic Statistician for the R language</a></li>
+<li class="chapter" data-level="3.5" data-path="implementing-the-automatic-statistician-in-r.html"><a href="implementing-the-automatic-statistician-in-r.html#challenges-of-the-automatic-statistician"><i class="fa fa-check"></i><b>3.5</b> Challenges of the Automatic Statistician</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>4</b> Conclusion</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/thllwg/tpotr" target="blank">Get <i>tpotr</i></a></li>
+<li><a href="https://github.com/thllwg/tpotr" target="blank">Get <i>autostatr</i></a></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">TPOT and the Automated Statistician</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="tree-based-pipeline-optimization-with-tpot" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> Tree-Based Pipeline Optimization With TPOT</h1>
+<div id="tree-based-pipeline-optimization-tool" class="section level2">
+<h2><span class="header-section-number">2.1</span> Tree-Based Pipeline Optimization Tool</h2>
+<p>To achieve the goal of automating machine learning the Tree-Based Pipeline Optimization Tool (TPOT) uses genetic programming (GP) for the representation and optimization of machine learning pipelines <span class="citation">(Olson and Moore <a href="#ref-olson_tpot_2018">2018</a>)</span>.</p>
+<p>GP is an evolutionary computation technique that is used to seek models with maximum fit. The special characteristic of GP is the usage of a tree-structure as representation. This characteristic allows for recombination by the exchange of subtrees and mutation by random changes in the tree-structure <span class="citation">(Eiben, Smith, and others <a href="#ref-eiben2003introduction">2003</a>)</span>.</p>
+<p>TPOT represents machine learning pipelines by treating the machine learning pipeline operators as GP primitives and the data set as GP terminals. This allows arbitrary and flexible pipeline structures. TPOT organizes the machine learning operators into the following categories: Feature preprocessing operators, feature selection operators and supervised classification operators. Fig.1 shows an exemplary pipeline. The data set is manipulated in a successive manner by each operator and the resulting data set is used for Logistic Regression algorithm to solve a classification task <span class="citation">(Olson and Moore <a href="#ref-olson_tpot_2018">2018</a>)</span>.</p>
+<div class="figure"><span id="fig:tpotimage"></span>
+<img src="images/ExemplaryTreePipeline.png" alt="Exemplary Tree-based pipeline [@olson_tpot_2018]" width="545" />
+<p class="caption">
+Figure 2.1: Exemplary Tree-based pipeline <span class="citation">(Olson and Moore <a href="#ref-olson_tpot_2018">2018</a>)</span>
+</p>
+</div>
+<p>The optimization of the pipeline is done by using a standard genetic programming algorithm. Classification accuracy is used as the pipelines fitness. The GP algorithm generates 100 random pipelines and selects the top 20 pipelines according to the NSGA-II selection scheme <em>nsgaII</em>. During this phase pipelines are selected to maximize classification accuracy and at the same time minimize the number of pipeline operators. Each of the top 20 pipelines produces 5 offspring’s. 5% of the offspring is affected by a crossover using one-point crossover. 90% of the unaffected offspring is randomly changed by a point, insert, or shrink mutation in the tree-structure respectively the machine learning pipeline. After 100 generations the pipeline with the highest classification accuracy is selected from the pareto-front <span class="citation">(Olson and Moore <a href="#ref-olson_tpot_2018">2018</a>)</span>.</p>
+<p>The authors implemented their approach in the python package TPOT.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> The package makes use of the two python packages <em>scikit-learn</em><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> and <em>DEAP</em>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> While <em>scikit-learn</em> is used for the interfacing of machine-learning operators, <em>DEAP</em> is used for the optimization with GP. The functionality of the python package TPOT goes beyond what is published by the TPOT authors <span class="citation">(Olson and Moore <a href="#ref-olson_tpot_2018">2018</a>)</span> in the AutoML-book <span class="citation">(Hutter, Kotthoff, and Vanschoren <a href="#ref-automl">2018</a>)</span>, because the package allows to manipulate the parameters of the used genetic programming algorithm and is constantly expanded. As an example the publication by <span class="citation">(Olson and Moore <a href="#ref-olson_tpot_2018">2018</a>)</span> only deals with classification, while the python package TPOT also offers regression.</p>
+</div>
+<div id="from-theory-to-practise-implementing-a-tree-based-pipeline-optimization-tool" class="section level2">
+<h2><span class="header-section-number">2.2</span> From Theory to Practise: Implementing a Tree-Based Pipeline Optimization Tool</h2>
+<div id="an-r-wrapper-for-tpot" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> An R-Wrapper for TPOT</h3>
+<div id="approach" class="section level4">
+<h4><span class="header-section-number">2.2.1.1</span> Approach</h4>
+<p>Two options for implementing TPOT in R were considered at the beginning. The first is an independent implementation of the underlying theory in R, which - possibly inspired by the Python reference implementation - renounce external dependencies to the extent that the essential algorithms and functions are executed in R. In addition to the obvious advantage that this approach spares users the need to install additional dependencies (programming languages, runtime environments, etc.), there are further benefits: language-dependent advantages of R over Python can be better exploited, maintenance and troubleshooting are simplified. R packages required for implementing TPOT functions are - at least partially - available for both pipeline operators and genetic programming (<em>ecr</em>). However, this also touches on one of the disadvantages of this procedure: Although a range of machine learning packages are available for R (<em>caret</em>, <em>mlr</em>), some of the libraries TPOT uses are not provided as R packages, making it difficult to recreate the reference implementation true to the original. The biggest disadvantage of a stand-alone implementation of TPOT, however, is the resulting separation from the actively developed reference implementation. Since the authors of this seminar paper do not plan to actively maintain the project, the two implementations would have to drift apart immediately with regard to their functional scope.</p>
+<p>These considerations lead to the second implementation option for TPOT in R, namely wrapping the existing Python implementation in R. The advantages are obvious: With the <em>reticulate</em> package, Python applications can be conveniently wrapped in R. Assuming API stability, the R implementation will then benefit from the continued development of TPOT in Python, which should significantly reduce the maintenance effort in R. Ultimately, this approach allows the functions and results of the Python implementation to be reproduced in a way that would not have been possible with an R-based custom development. Users of the Python variant should be able to determine little to no differences in the results of the application. Thus, it was decided to wrap the existing python package TPOT in a new R package <em>tpotr</em>. The realization is described in the following.</p>
+</div>
+<div id="requirements-implementation" class="section level4">
+<h4><span class="header-section-number">2.2.1.2</span> Requirements &amp; Implementation</h4>
+<p>Due to the chosen procedure, Python must be supported on the target system. In TPOTs installation documentation, the author recommends the use of the Enterprise Data Science Platform Anaconda.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Consequently, an installed Anaconda environment is required on the target system of the <em>tpotr</em>-package.</p>
+<p>The package contains five R files that represent the logic. Following classical conventions, functions required to load the package can be found in the R/zzz.R file. Other functions that are used to install Python libraries can be found in R/requirements.R and R/installation.R.
+If a user installs <em>tpotr</em>, the function <code>install_tpot()</code> is executed in the packages <code>.onload()</code>. This checks whether Anaconda is installed on the target system and then executes the installation procedure for TPOT using the reticulate packet, if this has not yet been installed. This procedure is repeated each time the package is loaded.</p>
+<p>For wrapping TPOT, constructor scripts were first created in Python, which can be found at /inst/python/pipeline_generator.py. This script is used by the R functions in R/TPOT.R to create and execute corresponding TPOT objects in Python.
+#### Integration with mlr
+The R package <em>mlr</em> is one of the more prominent packages for the execution of machine learning tasks in R <span class="citation">(Bischl et al. <a href="#ref-JMLR:v17:15-066">2016</a>)</span>. Essentially, the same steps are performed for any data sets: Creating an ML-Task, determining which Learner (i.e. which ML-Algorithm) should be applied to the problem and finally training the Learner on the data. While <em>mlr</em> comes with numerous Learners, the user of the package must decide which Learner is to be applied best to the problem at hand. Obviously the integration of TPOT as an <em>mlr</em>-learner can simplify the machine learning process. In accordance with the AutoML concept, this makes the use of machine learning methods more accessible. The provision of an external learner in <em>mlr</em> is described in detail in their documentation<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>, the corresponding implementation in <em>tpotr</em> is found in the file R/mlr.R.
+The following code excerpt shows the simple use of textit{tpotr} in <em>mlr</em> using the example of the iris classification task:</p>
+<pre class="sourceCode r"><code class="sourceCode r">task =<span class="st"> </span><span class="kw">makeClassifTask</span>(<span class="dt">data =</span> iris, <span class="dt">target =</span> <span class="st">&quot;Species&quot;</span>, <span class="dt">id =</span> <span class="st">&quot;iris&quot;</span>)
+learner =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="dt">cl =</span> <span class="st">&quot;classif.tpot&quot;</span>, <span class="dt">population_size =</span> <span class="dv">10</span>, <span class="dt">generations =</span> <span class="dv">3</span>, <span class="dt">verbosity =</span> <span class="dv">2</span>)
+model =<span class="st"> </span><span class="kw">train</span>(learner, task)
+<span class="kw">predict</span>(<span class="dt">obj =</span> model, <span class="dt">newdata =</span> testdata)</code></pre>
+<p>Due to the structure of <em>mlr</em>, however, the use of <em>tpotr</em> in <em>mlr</em> is not problem-free. In <em>mlr</em>, the prediction type is defined when the learner is created. With a classification problem, the standard <code>predict.type = 'response'</code> returns the predicted classes, while <code>predict.type='prob'</code> returns the probability of the individual classes. Now - if a learner is selected manually - it is clear in advance whether this learner is able to return the probability for classes. However, if TPOT fits a Machine Learning Pipeline, the fitted model may not support this prediction type. Since TPOT itself does not offer the possibility to prevent such pipelines, the user of the package must make use of adequate countermeasures here. For instance, you can train the model in a loop until a pipeline is fitted, that supports the <code>predict.type = 'prob'</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">task =<span class="st"> </span><span class="kw">makeClassifTask</span>(<span class="dt">data =</span> iris, <span class="dt">target =</span> <span class="st">&quot;Species&quot;</span>, <span class="dt">id =</span> <span class="st">&quot;iris&quot;</span>)
+learner =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="dt">cl =</span> <span class="st">&quot;classif.tpot&quot;</span>, <span class="dt">population_size =</span> <span class="dv">10</span>, <span class="dt">generations =</span> <span class="dv">3</span>, <span class="dt">verbosity =</span> <span class="dv">2</span>)
+model =<span class="st"> </span><span class="ot">NULL</span>; pred =<span class="st"> </span><span class="ot">NULL</span>;
+<span class="co"># predity.type = &quot;prob&quot; of learner is not supported by every possible</span>
+<span class="co"># tpot pipeline to ensure that tpot returns a pipeline </span>
+<span class="co"># that supports the &quot;prob&quot; property, iterate over the training </span>
+<span class="co"># until such pipeline is found.</span>
+<span class="cf">while</span>(<span class="ot">TRUE</span>){
+    result =<span class="st"> </span><span class="kw">try</span>({
+      model =<span class="st"> </span><span class="kw">train</span>(learner, task)
+      pred =<span class="st"> </span><span class="kw">predict</span>(<span class="dt">obj =</span> model, <span class="dt">newdata =</span> testdata)
+    }, <span class="dt">silent =</span> <span class="ot">TRUE</span>)
+    <span class="cf">if</span> (<span class="op">!</span><span class="kw">inherits</span>(result, <span class="st">&quot;try-error&quot;</span>)){
+      <span class="cf">break</span>
+    }
+}</code></pre>
+</div>
+<div id="testing-documentation" class="section level4">
+<h4><span class="header-section-number">2.2.1.3</span> Testing &amp; Documentation</h4>
+<p>The functionality of <em>tpotr</em> is ensured on several levels. By wrapping the Python implementation, the functional tests of the reference implementation take effect first. In the R package the wrapping as well as the integration with <em>mlr</em> is tested by means of the “testthat” package. Finally, with Travis CI - a free and open source software for continuous integration - the successful deployment on different virtual machines is tested after each change. Specifically, the package will be rolled out on a total of 8 virtual machines in different combinations of operating systems and installed Python versions<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. The Travis-CI tests are performed after each code change in the Github repository of the project, the .travis.yml file stored in the R package specifies the test environments.</p>
+<p>In spite of the extensive tests and the different levels at which tests are carried out, the successful completion of these tests does not lead to the conclusion that there are no errors. TPOT uses a number of dependencies that are maintained by different maintainers. Different update cycles can lead to problems between the individual packages, as documented in the BugTracker of the reference implementation.</p>
+<p>The documentation of the package is manifold. Code written in R is documented by the roxygen2-package. The reasoning and function of the package, as well as installation instructions and troubleshooting hints can be found on the Github page<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> of the project and in the package vignettes. In addition, the package contains a number of examples that demonstrate how to use the package. A detailed description of the underlying theory and additional information about the R package can be found in this report, that is also published via R bookdown as a github page.</p>
+</div>
+<div id="benchmarking" class="section level4">
+<h4><span class="header-section-number">2.2.1.4</span> Benchmarking</h4>
+<p>In the context of machine learning, the question of performance inevitably arises. With Auto-ML this is all the more true since experimenting (cf. TPOT) is a frequent component in finding and training machine learning models. The authors of the reference implementation have described the performance of their application in various publications (e.g. <span class="citation">(Olson and Moore <a href="#ref-olson_tpot_2018">2018</a>)</span>). The authors of this report have considered comparative performance studies, but rejected them for the following reasons: For the benchmarking runs to be comparable, not only the processed data sets would have to be the same, but also the pipeline operators tested within the genetic programming framework. However, the fundamental random influence cannot be eliminated by setting the seed of the random number generator. This is because the R implementation has no interface to pass its seed to the wrapped Python functions. Thus the test runs would only be comparable in the context of statistical surveys, i.e. the x-fold execution of <em>tpotr</em> and TPOT. These executions were not possible during the seminar due to time considerations. However, the necessity of benchmarks can be questioned with a simple consideration: The R code in <em>tpotr</em> only plays a critical role when TPOT is being initialized. All other operations (fitting the pipeline, executing predictions, etc.) are completely executed in Python and only the respective end result is transmitted back to the R-interface. This means that the performance of TPOT is only affected by the costs of the R calls. Although R is a comparatively slow language, it can be assumed that the delay is in the range of a few miliseconds.</p>
+
+</div>
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-JMLR:v17:15-066">
+<p>Bischl, Bernd, Michel Lang, Lars Kotthoff, Julia Schiffner, Jakob Richter, Erich Studerus, Giuseppe Casalicchio, and Zachary M. Jones. 2016. “Mlr: Machine Learning in R.” <em>Journal of Machine Learning Research</em> 17 (170): 1–5. <a href="http://jmlr.org/papers/v17/15-066.html">http://jmlr.org/papers/v17/15-066.html</a>.</p>
+</div>
+<div id="ref-eiben2003introduction">
+<p>Eiben, Agoston E, James E Smith, and others. 2003. <em>Introduction to Evolutionary Computing</em>. Vol. 53. Springer.</p>
+</div>
+<div id="ref-automl">
+<p>Hutter, Frank, Lars Kotthoff, and Joaquin Vanschoren, eds. 2018. <em>Automatic Machine Learning: Methods, Systems, Challenges</em>. Springer.</p>
+</div>
+<div id="ref-olson_tpot_2018">
+<p>Olson, Randal S., and Jason H. Moore. 2018. “TPOT: A Tree-Based Pipeline Optimization Tool for Automating Machine Learning.” In, edited by Frank Hutter, Lars Kotthoff, and Joaquin Vanschoren, 163–73. Springer.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p><a href="https://github.com/EpistasisLab/tpot" class="uri">https://github.com/EpistasisLab/tpot</a><a href="tree-based-pipeline-optimization-with-tpot.html#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p><a href="https://github.com/scikit-learn/scikit-learn" class="uri">https://github.com/scikit-learn/scikit-learn</a><a href="tree-based-pipeline-optimization-with-tpot.html#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p><a href="https://github.com/DEAP/deap" class="uri">https://github.com/DEAP/deap</a><a href="tree-based-pipeline-optimization-with-tpot.html#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p><a href="https://epistasislab.github.io/tpot/installing/" class="uri">https://epistasislab.github.io/tpot/installing/</a><a href="tree-based-pipeline-optimization-with-tpot.html#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p><a href="https://mlr.mlr-org.com/articles/tutorial/create_learner.html" class="uri">https://mlr.mlr-org.com/articles/tutorial/create_learner.html</a><a href="tree-based-pipeline-optimization-with-tpot.html#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p><a href="https://travis-ci.com/thllwg/tpotr" class="uri">https://travis-ci.com/thllwg/tpotr</a><a href="tree-based-pipeline-optimization-with-tpot.html#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p><a href="https://github.com/thllwg/tpotr" class="uri">https://github.com/thllwg/tpotr</a><a href="tree-based-pipeline-optimization-with-tpot.html#fnref7" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="implementing-the-automatic-statistician-in-r.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-tpotr.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
