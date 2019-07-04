@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/thllwg/tpotr.png?branch=master)](https://travis-ci.com/thllwg/tpotr)
+[![Build Status](https://travis-ci.com/thllwg/tpotr.svg?branch=master)](https://travis-ci.com/thllwg/tpotr)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # tpotr
